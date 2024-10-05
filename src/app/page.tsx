@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Keyboard, Timer, Trophy, Users, BarChart, Target, Zap, Coffee } from 'lucide-react'
 
 export default function Component() {
@@ -119,7 +119,7 @@ export default function Component() {
             ))}
           </div>
           <p className="text-white text-xl mb-8">
-            "TypeArena has transformed my typing speed and accuracy. I've never had so much fun improving my skills!"
+            &quot;TypeArena has transformed my typing speed and accuracy. I&apos;ve never had so much fun improving my skills!&quot;
           </p>
           <Button variant="outline" size="lg" className="bg-transparent text-white border-white hover:bg-white hover:text-purple-500">
             Read Success Stories
@@ -128,7 +128,7 @@ export default function Component() {
 
         <section className="bg-white/90 backdrop-blur-lg rounded-lg p-8 text-center">
           <h3 className="text-3xl font-bold text-gray-800 mb-6">Ready to Become a Typing Master?</h3>
-          <p className="text-xl text-gray-600 mb-8">Join our community of fast and accurate typists today. It's free to start!</p>
+          <p className="text-xl text-gray-600 mb-8">Join our community of fast and accurate typists today. It&apos;s free to start!</p>
           <div className="flex justify-center gap-4">
             <Button size="lg" className="bg-purple-500 text-white hover:bg-purple-600">
               Sign Up Now
