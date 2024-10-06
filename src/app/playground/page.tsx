@@ -7,13 +7,11 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 
 // Mock data for players
 const players = [
-  { id: 1, name: "Player 1" },
-  { id: 2, name: "Player 2" },
-  { id: 3, name: "Player 3" },
+  { id: 1, name: "You" },
 ]
 
 // Sample text for typing
-const sampleText = "The quick brown fox jumps over the lazy dog."
+const sampleText = "The sun was setting over the horizon, casting a warm golden glow across the landscape. A gentle breeze rustled through the trees, and the sound of birds chirping filled the air. The world seemed at peace in that quiet moment, and time felt like it was standing still. People walked slowly along the path, enjoying the beauty of the evening, while the clouds above turned shades of pink and orange. It was one of those perfect days, where everything felt in harmony, reminding us to appreciate the simple joys that life has to offer."
 
 export default function Component() {
   const [timer, setTimer] = useState(60)
