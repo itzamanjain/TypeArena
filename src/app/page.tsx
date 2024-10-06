@@ -1,15 +1,20 @@
+"use client"
+
+import { useState } from 'react'
 import Link from 'next/link'
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Keyboard, Timer, Trophy, Users, BarChart, Target, Zap, Coffee } from 'lucide-react'
+import { Keyboard, Timer, Trophy, Users, BarChart, Target, Zap, Coffee, Menu, X } from 'lucide-react'
 
 export default function Component() {
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-purple-400 via-pink-500 to-red-500">
       <header className="container mx-auto px-4 py-8">
         <nav className="flex justify-between items-center">
           <h1 className="text-3xl font-bold text-white">TypeArena</h1>
-          <div className="space-x-4">
+          <div className="hidden md:flex space-x-4">
             <Link href="/playground" className="text-white hover:text-yellow-300 transition-colors">
               Play Now
             </Link>
@@ -20,17 +25,36 @@ export default function Component() {
               Profile
             </Link>
           </div>
+          <button
+            className="md:hidden text-white"
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          >
+            {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+          </button>
         </nav>
+        {mobileMenuOpen && (
+          <div className="md:hidden mt-4 flex flex-col space-y-2">
+            <Link href="/playground" className="text-white hover:text-yellow-300 transition-colors">
+              Play Now
+            </Link>
+            <Link href="/leaderboard" className="text-white hover:text-yellow-300 transition-colors">
+              Leaderboard
+            </Link>
+            <Link href="/profile" className="text-white hover:text-yellow-300 transition-colors">
+              Profile
+            </Link>
+          </div>
+        )}
       </header>
 
       <main className="container mx-auto px-4 py-12">
         <section className="text-center mb-16">
-          <h2 className="text-5xl font-bold text-white mb-4">Master Your Typing Skills</h2>
-          <p className="text-xl text-white mb-8">Challenge yourself, compete with friends, and become a typing legend!</p>
+          <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">Master Your Typing Skills</h2>
+          <p className="text-lg md:text-xl text-white mb-8">Challenge yourself, compete with friends, and become a typing legend!</p>
           <Link href='/playground'>
-          <Button size="lg" className="bg-yellow-400 text-gray-800 hover:bg-yellow-500">
-            Start Typing Now
-          </Button>
+            <Button size="lg" className="bg-yellow-400 text-gray-800 hover:bg-yellow-500">
+              Start Typing Now
+            </Button>
           </Link>
         </section>
 
@@ -129,7 +153,7 @@ export default function Component() {
         <section className="bg-white/90 backdrop-blur-lg rounded-lg p-8 text-center">
           <h3 className="text-3xl font-bold text-gray-800 mb-6">Ready to Become a Typing Master?</h3>
           <p className="text-xl text-gray-600 mb-8">Join our community of fast and accurate typists today. It&apos;s free to start!</p>
-          <div className="flex justify-center gap-4">
+          <div className="flex flex-col sm:flex-row justify-center gap-4">
             <Button size="lg" className="bg-purple-500 text-white hover:bg-purple-600">
               Sign Up Now
             </Button>
@@ -181,7 +205,7 @@ export default function Component() {
             </div>
           </div>
           <div className="mt-8 text-center">
-            <p>&copy; 2023 TypeArena. All rights reserved.</p>
+            <p>&copy; 2024 TypeArena. All rights reserved.</p>
           </div>
         </div>
       </footer>

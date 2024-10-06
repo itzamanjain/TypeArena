@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -18,6 +18,8 @@ export default function Component() {
   const [isGameStarted, setIsGameStarted] = useState(false)
   const [typedText, setTypedText] = useState("")
   const [scores, setScores] = useState(players.map(player => ({ ...player, wpm: 0, accuracy: 100 })))
+  const [currentWordIndex, setCurrentWordIndex] = useState(0)
+  const inputRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
     let interval: NodeJS.Timeout
@@ -35,7 +37,11 @@ export default function Component() {
     setIsGameStarted(true)
     setTimer(60)
     setTypedText("")
+    setCurrentWordIndex(0)
     setScores(players.map(player => ({ ...player, wpm: 0, accuracy: 100 })))
+    if (inputRef.current) {
+      inputRef.current.focus()
+    }
   }
 
   const handleTyping = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -54,6 +60,10 @@ export default function Component() {
         index === 0 ? { ...score, wpm, accuracy } : score
       )
     )
+
+    // Update current word index
+    const typedWords = typed.split(' ')
+    setCurrentWordIndex(typedWords.length - 1)
   }
 
   const calculateAccuracy = (original: string, typed: string) => {
@@ -62,6 +72,28 @@ export default function Component() {
       if (typed[i] === original[i]) correct++
     }
     return Math.round((correct / typed.length) * 100) || 100
+  }
+
+  const renderTypingText = () => {
+    const words = sampleText.split(' ')
+    return words.map((word, index) => {
+      const isCurrentWord = index === currentWordIndex
+      const isTypedWord = index < currentWordIndex
+      const typedWord = typedText.split(' ')[index] || ''
+      
+      let wordClass = 'inline-block px-1 py-0.5 rounded '
+      if (isCurrentWord) {
+        wordClass += 'bg-yellow-200 '
+      } else if (isTypedWord) {
+        wordClass += typedWord === word ? 'text-green-600 ' : 'text-red-600 bg-red-100 '
+      }
+
+      return (
+        <span key={index} className={wordClass}>
+          {word}
+        </span>
+      )
+    })
   }
 
   return (
@@ -73,26 +105,27 @@ export default function Component() {
           {isGameStarted ? "Game in progress" : "Start Game"}
         </Button>
       </div>
-      <div className="flex gap-4">
-        <Card className="w-2/3">
+      <div className="flex flex-col md:flex-row gap-4">
+        <Card className="w-full md:w-2/3">
           <CardHeader>
             <CardTitle>Typing Area</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="mb-4 p-4 bg-muted rounded-md noselect">
-              {sampleText}
+            <div className="mb-4 p-4 bg-muted rounded-md noselect overflow-y-auto h-40 text-sm md:text-base leading-relaxed">
+              {renderTypingText()}
             </div>
             <Input
+              ref={inputRef}
               value={typedText}
               onChange={handleTyping}
               onPaste={(e) => e.preventDefault()}  // Disable paste
               disabled={!isGameStarted}
               placeholder={isGameStarted ? "Start typing..." : "Wait for the game to start"}
-              className="w-full"
+              className="w-full h-[50px]"
             />
           </CardContent>
         </Card>
-        <Card className="w-1/3">
+        <Card className="w-full md:w-1/3">
           <CardHeader>
             <CardTitle>Live Scoreboard</CardTitle>
           </CardHeader>
