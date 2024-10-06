@@ -81,12 +81,13 @@ export default function Component() {
             <CardTitle>Typing Area</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="mb-4 p-4 bg-muted rounded-md">
+            <div className="mb-4 p-4 bg-muted rounded-md noselect">
               {sampleText}
             </div>
             <Input
               value={typedText}
               onChange={handleTyping}
+              onPaste={(e) => e.preventDefault()}  // Disable paste
               disabled={!isGameStarted}
               placeholder={isGameStarted ? "Start typing..." : "Wait for the game to start"}
               className="w-full"
