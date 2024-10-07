@@ -41,7 +41,7 @@ const TypingTest: React.FC = () => {
   const [isGameStarted, setIsGameStarted] = useState<boolean>(false);
   const [typedText, setTypedText] = useState<string>("");
   const [scores, setScores] = useState<Player[]>(players);
-  const [sampleText, setSampleText] = useState<string>("When you start the game, you will be given a new paragraph. 😊");
+  const [sampleText, setSampleText] = useState<string>("When you start the game, you will be given a new paragraph.");
 
   const textareaRef = useRef<HTMLTextAreaElement>(null); // Ref for textarea
 
@@ -136,7 +136,7 @@ const TypingTest: React.FC = () => {
         {characters.map((char, index) => {
           let color;
           if (index < typedText.length) {
-            color = char === typedText[index] ? 'text-green-700' : 'text-red-500';
+            color = char === typedText[index] ? 'text-green-500' : 'bg-red-300';
           } else {
             color = 'text-gray-700';
           }
@@ -151,7 +151,7 @@ const TypingTest: React.FC = () => {
   };
 
   return (
-    <div className="container mx-auto p-4">
+    <div className="container min-h-screen mx-auto p-4">
       <div className="text-center mb-4">
         <h1 className="text-2xl font-bold mb-2">Typing Speed Test</h1>
         {isGameStarted ? (
@@ -165,7 +165,7 @@ const TypingTest: React.FC = () => {
           <CardTitle>Text to type:</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="text-lg font-mono">
+          <div className="text-xl font-mono">
             {renderSampleText()} {/* Render colored text */}
           </div>
         </CardContent>
