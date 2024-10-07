@@ -136,7 +136,7 @@ const TypingTest: React.FC = () => {
         {characters.map((char, index) => {
           let color;
           if (index < typedText.length) {
-            color = char === typedText[index] ? 'text-green-500' : 'text-red-500';
+            color = char === typedText[index] ? 'text-green-700' : 'text-red-500';
           } else {
             color = 'text-gray-700';
           }
