@@ -1,36 +1,95 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Type Arena
+
+**Type Arena** is a fast-paced multiplayer typing game that challenges your typing speed and accuracy. Compete with others in real-time to prove you're the fastest typist in the arena!
+
+## Table of Contents
+- [Features](#features)
+- [Getting Started](#getting-started)
+- [Installation](#installation)
+- [How to Play](#how-to-play)
+- [Contributing](#contributing)
+- [Technologies Used](#technologies-used)
+- [Deployment](#deployment)
+
+
+## Features
+
+- **Real-Time Multiplayer**: Play against other players in real-time typing matches.
+- **Live Scoreboard**: Track your rank and progress during live games.
+- **Typing Speed & Accuracy**: Monitor your Words Per Minute (WPM) and accuracy in every game.
+- **Leaderboard**: Compare your scores with players worldwide.
+- **Custom Game Rooms**: Create personalized game rooms with custom settings such as word length, game duration, and more.
+- **Mobile & Desktop Friendly**: Fully responsive design for both desktop and mobile users.
 
 ## Getting Started
 
-First, run the development server:
+Follow the instructions below to set up and run Type Arena on your local machine.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+### Prerequisites
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+You will need to have the following installed on your system:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- [Node.js](https://nodejs.org/) (v20 or newer)
+- [npm](https://www.npmjs.com/) (or Yarn, pnpm, or bun)
+- Git (recommended for cloning the repository)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Installation
 
-## Learn More
+1. Clone the repository:
 
-To learn more about Next.js, take a look at the following resources:
+   ```bash
+   git clone https://github.com/yourusername/type-arena.git
+   ```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+   ```bash
+   cd type-arena
+   npm install
+   npm run dev
+   ```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+   Open your browser and navigate to http://localhost:3000 to access the game.
 
-## Deploy on Vercel
+## How to Play
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+1. **Join or Create a Room**: Enter an existing game room or create a custom one with your preferred settings (e.g., word length, game duration).
+2. **Start Typing**: Type the provided text as quickly and accurately as possible once the game begins.
+3. **Live Scoreboard**: Track your typing speed (Words Per Minute) and accuracy during the game in real-time.
+4. **Win the Game**: The player with the highest WPM and accuracy at the end of the match wins!
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Contributing
+
+We welcome contributions to enhance Type Arena! Here’s how you can contribute:
+
+1. Fork the repository.
+2. Create a new branch for your feature or fix:
+   
+   ```bash
+   git checkout -b feature/YourFeatureName
+   ```
+
+commit the changes
+
+  ```bash
+   git commit -m "Add YourFeatureName"
+  ```
+
+3. push to the brach
+     ```bash
+       git push origin feature/YourFeatureName
+     ```
+4. Open a pull request, and we will review it.
+
+## Technologies Used
+
+1. Next.js - React-based framework for building the frontend.
+
+2. Socket.io - Enables real-time, bidirectional communication between players.
+
+3. Tailwind CSS - Utility-first CSS framework used for designing the UI.
+4. React - JavaScript library for building user interfaces.
+5. Vercel - Platform for deploying and hosting the application.
+
+## Deployment 
+
+for frontend deployment we are using vercel and for backend we are figuring out either free or cheap for as of now (for backend we have express and socket io server ) and for auth and all we are using next js api/ route.ts 
+
