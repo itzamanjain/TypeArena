@@ -117,6 +117,41 @@ const Switch: React.FC<SwitchProps> = ({
 };
 
 // -----------------------
+// Modal Component
+// -----------------------
+interface ModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  children: React.ReactNode;
+}
+
+const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
+  if (!isOpen) return null;
+
+  return (
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
+      onClick={onClose} // Close modal when clicking outside the content
+    >
+      <div
+        className="bg-white dark:bg-gray-800 rounded-lg shadow-lg max-w-md w-full p-6 relative"
+        onClick={(e) => e.stopPropagation()} // Prevent closing when clicking inside the modal content
+      >
+        {/* Close Button */}
+        <button
+          className="absolute top-2 right-2 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300"
+          onClick={onClose}
+          aria-label="Close Modal"
+        >
+          &times;
+        </button>
+        {children}
+      </div>
+    </div>
+  );
+};
+
+// -----------------------
 // Player Interface
 // -----------------------
 interface Player {
@@ -131,6 +166,8 @@ interface Player {
 // TypingTest Component
 // -----------------------
 const TypingTest: React.FC = () => {
+  const WORD_LIMIT = 100; // Maximum number of words allowed
+
   const [timer, setTimer] = useState<number>(60);
   const [isGameStarted, setIsGameStarted] = useState<boolean>(false);
   const [typedText, setTypedText] = useState<string>("");
@@ -142,25 +179,34 @@ const TypingTest: React.FC = () => {
   );
   const [errors, setErrors] = useState<number>(0);
   const [theme, setTheme] = useState<"light" | "dark">("light");
+  const [showModal, setShowModal] = useState<boolean>(false); // State for Modal
+  const [wordCount, setWordCount] = useState<number>(0); // State for word count
+  const [pasteAttempted, setPasteAttempted] = useState<boolean>(false); // State for paste attempt
 
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const sampleTexts: string[] = [
+    // ...your existing sample texts
     "The sun was setting over the horizon, casting a warm golden glow across the landscape. A gentle breeze rustled through the trees, and the sound of birds chirping filled the air. The world seemed at peace in that quiet moment, and time felt like it was standing still. People walked slowly along the path, enjoying the beauty of the evening, while the clouds above turned shades of pink and orange. It was one of those perfect days, where everything felt in harmony, reminding us to appreciate the simple joys that life has to offer.",
 
     "In a small village, nestled between lush hills, lived an old woman named Clara. She was known for her extraordinary ability to weave tales that enchanted everyone who listened. Each evening, children would gather around her fireplace, eyes wide with anticipation, as she spun stories of dragons, fairies, and brave heroes. Clara’s voice, soft yet powerful, painted vivid images in their minds, transporting them to far-off lands. As the fire crackled and the stars twinkled outside, the children would lose themselves in the magic of her words, eager for the next adventure.",
 
-    "Beneath the vast blue ocean, a world filled with mysteries awaited discovery. Colorful coral reefs thrived in the sunlight, providing shelter to myriad sea creatures. Schools of fish darted through the water, their scales shimmering like jewels. In the depths, an ancient shipwreck lay, covered in seaweed and home to curious octopuses. Explorers dreamed of uncovering the secrets hidden within, using advanced technology to navigate the underwater landscape. Each dive brought new surprises, and with every bubble released, the thrill of exploration ignited their spirits, reminding them of the beauty of the unknown.",
+    "Emma was rushing out for work when she realized her key was missing. Panic set in as she rummaged through her bag, pockets, and drawers. She retraced her steps but found nothing. Feeling hopeless, she sat down, only to notice her cat batting something shiny under the couch. Reaching underneath, she pulled out the key. Emma sighed in relief, laughing at the irony. Her cat, always mischievous, had hidden her most important possession. She petted him, grateful for the unexpected help. Sometimes, the solution is right under our noses, waiting to be discovered.",
 
-    "As winter approached, the first snowfall blanketed the quiet town, transforming it into a scene from a postcard. Children bundled up in colorful jackets raced outside, laughter echoing in the chilly air as they built snowmen and engaged in friendly snowball fights. The crisp smell of pine filled the air as families prepared for the holidays, decorating their homes with twinkling lights. Hot chocolate was served, steam rising from mugs as everyone gathered around fireplaces, sharing stories and warmth. It was a time for togetherness, reminding each person of the joy and love that came with the season.",
+    "When Lily and her friends dug up the time capsule they buried a decade ago, they felt nostalgic. Each item brought back memories: a toy car, a friendship bracelet, and a photograph of their younger selves. They laughed, remembering the carefree days of childhood. But one note caught Lily’s eye; it was her own message, predicting where she’d be in ten years. She smiled, realizing she had achieved most of her dreams. The time capsule reminded them of their past, but it also inspired them to create new memories together, making every moment count.",
+    
+    "In a small town, there was an old library that no one visited anymore. Maya, a book lover, decided to volunteer and bring it back to life. She dusted the shelves, reorganized books, and set up a cozy reading corner. Slowly, children started coming, curious about the new stories waiting for them. Soon, the library became a lively place again, filled with laughter and whispers of shared stories. Maya felt fulfilled, knowing she had created a haven for young readers. The little library once forgotten was now a cherished place, bringing people together through the magic of books.",
 
-    "The forest was alive with the sounds of nature, a symphony of rustling leaves and chirping crickets. As the sun filtered through the trees, it created a dance of light and shadow on the forest floor. A young girl named Elara wandered through the woods, enchanted by the beauty surrounding her. She discovered hidden paths leading to sparkling streams and secret clearings filled with wildflowers. Each step unveiled the wonders of the natural world, filling her heart with peace and curiosity. Elara knew that this magical place would always hold a special spot in her heart, a sanctuary of tranquility.",
+    "Jack hated rainy days. They always ruined his plans, making him feel trapped indoors. One day, the rain was relentless, and he sat by the window, sulking. Suddenly, he saw a little girl outside, splashing in the puddles, her face beaming with joy. Jack smiled, inspired by her carefree spirit. He grabbed his raincoat and joined her, feeling the cool drops on his face. They laughed, jumping in puddles together. Jack realized rainy days weren’t so bad after all; they could be fun if he embraced the moment. Sometimes, joy comes from the simplest of things.",
 
-    "In a bustling city, where life moved at a rapid pace, a small bookstore stood as a quiet refuge. Shelves filled with stories waited to be explored, and the scent of aged paper enveloped visitors as they stepped inside. The owner, an elderly gentleman named Mr. Harper, greeted everyone with a warm smile, ready to recommend a book for every mood. People would lose track of time in the cozy corners, sipping tea while diving into worlds crafted by words. The bookstore became a gathering place for book clubs and writers, fostering a community bound by a shared love for literature.",
+    "Walking home late one night, Mia noticed a small, wrapped box on a bench. Curious, she picked it up and read the tag: “To someone who needs a little magic.” She hesitated but took it home. Inside was a silver charm bracelet, each charm representing something magical—a star, a moon, and a tiny book. The bracelet felt special, as if it had been meant for her. From that day, little lucky moments happened: a surprise job offer, an old friend reconnecting. Mia smiled, realizing that sometimes, the universe sends small gifts to brighten our paths.",
 
-    "A brilliant scientist named Dr. Elena Carter was on the brink of a groundbreaking discovery. After years of research, she developed a device capable of harnessing renewable energy from the sun more efficiently than ever before. As she stood in her lab, surrounded by papers and models, excitement bubbled within her. This innovation could change the world, providing sustainable energy to millions. With her team, she prepared for a demonstration that could revolutionize energy consumption. The weight of responsibility pressed on her shoulders, but Elena was determined to bring her vision to life, confident in the positive impact it would have.",
+    "Lucas missed the last bus home and ended up at the train station, waiting for the midnight train. It was eerily quiet, the air filled with the distant hum of engines. He noticed an elderly man sitting alone, staring at an old photograph. Lucas struck up a conversation, and the man shared stories of his travels across the country when he was young. The train finally arrived, and as Lucas boarded, the man smiled, saying, “Cherish your adventures, son.” Years later, Lucas remembered that encounter, grateful for the wisdom shared during that unexpected, fleeting moment.",
 
-    "In the heart of the city, a beautiful garden bloomed amid the concrete jungle. Vibrant flowers danced in the gentle breeze, and butterflies flitted from blossom to blossom, creating a stunning display of nature’s artistry. The garden was a sanctuary for weary souls seeking solace from their hectic lives. Visitors would come to meditate, read, or simply enjoy the beauty surrounding them. On weekends, the garden came alive with laughter as families gathered for picnics and children chased each other through the greenery. It was a reminder that even in urban chaos, nature could thrive and bring joy.",
+    "Ella’s job as a lighthouse keeper was lonely, but she loved the sea’s roar and the beacon’s steady light cutting through the darkness. One stormy night, she spotted a tiny fishing boat struggling against the waves. Without hesitation, she activated the foghorn and intensified the light, guiding the boat to safety. The next morning, a fisherman knocked on her door, holding a basket of freshly caught fish. “Thank you for saving me,” he said. Ella smiled, realizing her work wasn’t just about maintaining a lighthouse; it was about helping others find their way home.",
+
+    "Jack hated rainy days. They always ruined his plans, making him feel trapped indoors. One day, the rain was relentless, and he sat by the window, sulking. Suddenly, he saw a little girl outside, splashing in the puddles, her face beaming with joy. Jack smiled, inspired by her carefree spirit. He grabbed his raincoat and joined her, feeling the cool drops on his face. They laughed, jumping in puddles together. Jack realized rainy days weren’t so bad after all; they could be fun if he embraced the moment. Sometimes, joy comes from the simplest of things."
+  
   ];
 
   // -----------------------
@@ -208,8 +254,9 @@ const TypingTest: React.FC = () => {
       interval = setInterval(() => {
         setTimer((prevTimer) => prevTimer - 1);
       }, 1000);
-    } else if (timer === 0) {
+    } else if (timer === 0 && isGameStarted) {
       setIsGameStarted(false);
+      setShowModal(true); // Show the modal when time ends
     }
     return () => clearInterval(interval);
   }, [isGameStarted, timer]);
@@ -224,6 +271,9 @@ const TypingTest: React.FC = () => {
     setSampleText(selectRandomSampleText());
     setScores([{ id: 1, name: "You", wpm: 0, accuracy: 100, errors: 0 }]);
     setErrors(0);
+    setWordCount(0);
+    setShowModal(false); // Hide modal if it's open
+    setPasteAttempted(false); // Reset paste attempt state
 
     if (textareaRef.current) {
       textareaRef.current.style.height = "auto";
@@ -241,24 +291,32 @@ const TypingTest: React.FC = () => {
   // Handle Typing
   // -----------------------
   const handleTyping = (e: React.ChangeEvent<HTMLTextAreaElement>): void => {
-    const typed = e.target.value;
+    let typed = e.target.value;
+
+    // Split the typed text into words
+    const words = typed.trim().split(/\s+/).filter((word) => word.length > 0);
+    let currentWordCount = words.length;
+
+    if (currentWordCount > WORD_LIMIT) {
+      // If word limit exceeded, trim the typed text to the word limit
+      typed = words.slice(0, WORD_LIMIT).join(" ");
+      currentWordCount = WORD_LIMIT;
+    }
+
     setTypedText(typed);
+    setWordCount(currentWordCount);
 
     if (textareaRef.current) {
       textareaRef.current.style.height = "auto";
       textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
     }
 
-    const words = typed
-      .trim()
-      .split(/\s+/)
-      .filter((word) => word.length > 0).length;
     const characters = typed.length;
     const accuracy = calculateAccuracy(
       sampleText.substring(0, characters),
       typed
     );
-    const wpm = timer > 0 ? Math.round((words / (60 - timer)) * 60) : 0;
+    const wpm = timer > 0 ? Math.round((currentWordCount / (60 - timer)) * 60) : 0;
 
     const currentErrors = countErrors(
       sampleText.substring(0, characters),
@@ -290,6 +348,29 @@ const TypingTest: React.FC = () => {
       if (typed[i] !== original[i]) errorCount++;
     }
     return errorCount;
+  };
+
+  // -----------------------
+  // Handle Paste Attempt
+  // -----------------------
+  const handlePaste = (e: React.ClipboardEvent<HTMLTextAreaElement>) => {
+    e.preventDefault(); // Prevent pasting
+    setPasteAttempted(true); // Trigger feedback message
+  };
+
+  useEffect(() => {
+    if (pasteAttempted) {
+      const timer = setTimeout(() => setPasteAttempted(false), 3000); // Hide message after 3 seconds
+      return () => clearTimeout(timer);
+    }
+  }, [pasteAttempted]);
+
+  // -----------------------
+  // Prevent Drag-and-Drop Pasting (Optional)
+  // -----------------------
+  const handleDrop = (e: React.DragEvent<HTMLTextAreaElement>) => {
+    e.preventDefault(); // Prevent dropping text
+    setPasteAttempted(true); // Optionally trigger feedback
   };
 
   // -----------------------
@@ -352,8 +433,10 @@ const TypingTest: React.FC = () => {
             ref={textareaRef}
             value={typedText}
             onChange={handleTyping}
+            onPaste={handlePaste} // Prevent pasting
+            onDrop={handleDrop} // Prevent drag-and-drop pasting (optional)
             placeholder="Start typing..."
-            disabled={!isGameStarted}
+            disabled={!isGameStarted || wordCount >= WORD_LIMIT}
             className={clsx(
               "w-full mt-4 p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none overflow-hidden",
               theme === "dark"
@@ -361,6 +444,26 @@ const TypingTest: React.FC = () => {
                 : "bg-gray-100 text-gray-900 border-gray-300"
             )}
           />
+          {/* Word Count Display */}
+          <div
+            className={clsx(
+              "mt-2 text-sm",
+              wordCount >= WORD_LIMIT
+                ? "text-red-500 dark:text-red-400"
+                : "text-gray-600 dark:text-gray-400"
+            )}
+          >
+            Words: {wordCount} / {WORD_LIMIT}
+            {wordCount >= WORD_LIMIT && (
+              <span className="ml-2">You've reached the word limit.</span>
+            )}
+          </div>
+          {/* Paste Attempt Feedback */}
+          {pasteAttempted && (
+            <div className="mt-2 text-sm text-red-500 dark:text-red-400">
+              Pasting is disabled. Please type manually.
+            </div>
+          )}
           <div className="mt-4">
             <Button onClick={startGame} className="bg-blue-600 hover:bg-blue-700">
               {isGameStarted ? "Restart Test" : "Start Test"}
@@ -391,6 +494,34 @@ const TypingTest: React.FC = () => {
           </ul>
         </CardContent>
       </Card>
+
+      {/* Modal for Time Finished */}
+      <Modal isOpen={showModal} onClose={() => setShowModal(false)}>
+        <h2 className="text-2xl font-bold mb-4">Time's Up!</h2>
+        <p className="mb-4">Your time has finished. Here are your results:</p>
+        <ul className="space-y-2">
+          {scores.map((score) => (
+            <li key={score.id}>
+              <div className="flex justify-between">
+                <span className="font-semibold">{score.name}</span>
+                <div className="space-x-2">
+                  <span>WPM: {score.wpm}</span>
+                  <span>Accuracy: {score.accuracy}%</span>
+                  <span>Errors: {score.errors}</span>
+                </div>
+              </div>
+            </li>
+          ))}
+        </ul>
+        <div className="mt-6 flex justify-end space-x-4">
+          <Button onClick={startGame} className="bg-green-500 hover:bg-green-600">
+            Play Again
+          </Button>
+          <Button onClick={() => setShowModal(false)} className="bg-gray-500 hover:bg-gray-600">
+            Close
+          </Button>
+        </div>
+      </Modal>
     </div>
   );
 };
