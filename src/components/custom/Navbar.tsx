@@ -8,13 +8,13 @@ import { Menu } from 'lucide-react'
 
 const NavItems = () => (
   <>
-    <Link href="/playground" className="text-gray-600 hover:text-gray-900 transition-colors">
+    <Link href="/playground" className="text-gray-600 dark:text-white hover:text-gray-900 transition-colors">
       Play Now
     </Link>
-    <Link href="/leaderboard" className="text-gray-600 hover:text-gray-900 transition-colors">
+    <Link href="/leaderboard" className="text-gray-600 dark:text-white hover:text-gray-900 transition-colors">
       Leaderboard
     </Link>
-    <Link href="/signup" className="text-gray-600 hover:text-gray-900 transition-colors">
+    <Link href="/signup" className="text-gray-600 dark:text-white hover:text-gray-900 transition-colors">
       Join Now
     </Link>
   </>
@@ -26,7 +26,7 @@ export function Navbar() {
   return (
     <header className="container mx-auto px-4 py-6 border-b">
       <nav className="flex justify-between items-center">
-        <h1 className="text-2xl font-bold text-gray-900"><Link href='/'>TypeArena</Link></h1>
+        <h1 className="text-2xl dark:text-white  font-bold text-gray-900"><Link href='/'>TypeArena</Link></h1>
         <div className="hidden md:flex space-x-6">
           <NavItems />
         </div>

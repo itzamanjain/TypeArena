@@ -17,7 +17,7 @@ const Button: React.FC<ButtonProps> = ({ children, className, ...props }) => {
   return (
     <button
       className={clsx(
-        "bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded transition-colors duration-200",
+        "bg-black text-white hover:bg-gray-900 font-semibold py-2 px-4 rounded transition-colors duration-200",
         className
       )}
       {...props}
@@ -425,7 +425,7 @@ const TypingTest: React.FC = () => {
       {/* Typing Test Card */}
       <Card className="bg-white dark:bg-gray-800">
         <CardHeader>
-          <CardTitle>Time Remaining: {timer}s</CardTitle>
+          <CardTitle >{isGameStarted && <h1 className="text-red-500">Time Remaining: {timer}s</h1>}</CardTitle>
         </CardHeader>
         <CardContent>
           {renderSampleText()}
@@ -465,7 +465,7 @@ const TypingTest: React.FC = () => {
             </div>
           )}
           <div className="mt-4">
-            <Button onClick={startGame} className="bg-blue-600 hover:bg-blue-700">
+            <Button onClick={startGame} className="bg-black text-white dark:bg-white dark:text-black">
               {isGameStarted ? "Restart Test" : "Start Test"}
             </Button>
           </div>
