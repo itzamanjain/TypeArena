@@ -26,7 +26,7 @@ interface RoomEvent {
   players?: Players;
 }
 
-const socket: Socket = io('http://localhost:5000'); // Connect to the server
+const socket: Socket = io('https://typearena-backend.onrender.com/'); // Connect to the server
 
 export default function TypingTest() {
   const [roomId, setRoomId] = useState<string>('');
