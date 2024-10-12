@@ -4,21 +4,14 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Keyboard, Timer, Trophy, Users, BarChart, Target, Zap, Coffee } from 'lucide-react'
 import { Navbar } from "@/components/custom/Navbar"
 import { Footer } from "@/components/custom/Footer"
+import { Hero } from '@/components/custom/Hero'
 
 export default function Home() {
   return (
     <div className="min-h-screen bg-white">
       
       <main className="container mx-auto px-4 py-12">
-        <section className="text-center mb-16">
-          <h2 className="text-4xl font-bold text-gray-900 mb-4">Master Your Typing Skills</h2>
-          <p className="text-xl text-gray-600 mb-8">Challenge yourself, compete with friends, and become a typing legend!</p>
-          <Link href='/playground'>
-            <Button size="lg" className="bg-gray-900 text-white hover:bg-gray-800">
-              Start Typing Now
-            </Button>
-          </Link>
-        </section>
+        <Hero />
 
         <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
           <Card>
