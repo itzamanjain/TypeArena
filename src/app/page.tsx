@@ -5,6 +5,7 @@ import { Keyboard, Timer, Trophy, Users, BarChart, Target, Zap, Coffee } from 'l
 import { Navbar } from "@/components/custom/Navbar"
 import { Footer } from "@/components/custom/Footer"
 import { Hero } from '@/components/custom/Hero'
+import { HeroScrollDemo } from '@/components/custom/HeroScroll'
 
 export default function Home() {
   return (
@@ -12,7 +13,6 @@ export default function Home() {
       
       <main className="container mx-auto px-4 py-12">
         <Hero />
-
         <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
           <Card>
             <CardHeader>
