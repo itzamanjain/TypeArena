@@ -15,7 +15,7 @@ export function Hero() {
         <Link href="/playground">
           <Button
             size="lg"
-            className="bg-gray-900 text-white hover:bg-gray-800"
+            className="bg-gray-900 text-white mb-2 hover:bg-gray-800"
           >
             Start Typing Now
           </Button>
