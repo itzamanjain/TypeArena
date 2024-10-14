@@ -10,7 +10,7 @@ export function HeroScrollDemo() {
         titleComponent={
           <>
             <h1 className="text-4xl  font-semibold text-black dark:text-white">
-            Race Your Way to the Top with  <br />
+            Race Your Way to the Top with<br />
               <span className="text-3xl md:text-[6rem] font-bold mt-1 leading-none">
                Type Arena!
               </span>
