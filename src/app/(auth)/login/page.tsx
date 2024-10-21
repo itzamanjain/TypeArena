@@ -7,10 +7,12 @@ import { Label } from "@/components/ui/label"
 import { useState } from 'react'
 import axios from 'axios'
 import { useRouter } from 'next/navigation'
+import useAuthStore from '@/store/useStore' // Import your auth store
 
 export default function LoginPage() {
 
   const router = useRouter();
+  const { login } = useAuthStore(); // Access the login function from the store
 
   const [user, setUser] = useState({
     email: '',
@@ -32,12 +34,20 @@ export default function LoginPage() {
 
     try {
       const response = await axios.post('/api/login', user);
-      console.log(response.data);
-      router.push('/lobby');
-      // Handle successful login, e.g., redirect the user, show success message, etc.
+      console.log("response:", response.data);
+      
+      // Assuming the response contains user data in the format { id, name, email }
+      const userData = response.data.user; // Extract the user data from the response
 
+      // Set user as authenticated in the store
+      login(userData); // Call the login function from your auth store
+
+      // Redirect to lobby page after successful login
+      router.push('/lobby');
+      
     } catch (error: any) {
       console.error("Error during login:", error);
+      // Handle login error here (e.g., show an error message to the user)
 
     } finally {
       setLoading(false); // Set loading back to false after request completes
