@@ -5,6 +5,9 @@ import Link from 'next/link'
 import { Button } from "@/components/ui/button"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import { Menu } from 'lucide-react'
+import useAuthStore from '@/store/useStore'
+import { useRouter } from 'next/navigation'
+import axios from 'axios'
 
 const NavItems = () => (
   <>
@@ -14,21 +17,40 @@ const NavItems = () => (
     <Link href="/lobby" className="text-gray-600 dark:text-white hover:text-gray-900 transition-colors">
       Play with friends
     </Link>
-    <Link href="/signup" className="text-gray-600 dark:text-white hover:text-gray-900 transition-colors">
-      Join Now
-    </Link>
   </>
 )
 
 export function Navbar() {
+  const router = useRouter();
+  const { isAuthenticated, logout } = useAuthStore()
   const [isOpen, setIsOpen] = useState(false)
+
+  const handleLogout = async () => {
+    // api call for logout 
+    const response = await axios.get('/api/logout')
+    console.log("response:", response.data)
+    // Call the logout function from your auth store
+    logout()
+
+    router.push('/login')
+  }
 
   return (
     <header className="container mx-auto px-4 py-6 border-b">
       <nav className="flex justify-between items-center">
-        <h1 className="text-2xl dark:text-white  font-bold text-gray-900"><Link href='/'>TypeArena</Link></h1>
-        <div className="hidden md:flex space-x-6">
+        <h1 className="text-2xl dark:text-white font-bold text-gray-900">
+          <Link href='/'>TypeArena</Link>
+        </h1>
+        <div className="hidden md:flex justify-center items-center space-x-6">
           <NavItems />
+          {/* Conditional Rendering for Auth Button */}
+          {isAuthenticated ? (
+            <Button onClick={handleLogout}>Logout</Button>
+          ) : (
+            <Button>
+              <Link href="/signup">Join Now</Link>
+            </Button>
+          )}
         </div>
         <Sheet open={isOpen} onOpenChange={setIsOpen}>
           <SheetTrigger asChild className="md:hidden">
@@ -39,6 +61,12 @@ export function Navbar() {
           <SheetContent side="right" className="w-[240px] sm:w-[300px]">
             <nav className="flex flex-col space-y-4 mt-8">
               <NavItems />
+              {/* Conditional Rendering for Auth Button */}
+              {isAuthenticated ? (
+                <Button onClick={handleLogout}>Logout</Button>
+              ) : (
+                <Link href="/signup">Join Now</Link>
+              )}
             </nav>
           </SheetContent>
         </Sheet>
