@@ -8,7 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Textarea } from "@/components/ui/textarea";
 import { AlertCircle, Clock, Trophy, Users } from "lucide-react";
-
+import sampleParagraphs from '@/data/sampleParagraphs';
 // Define the types for players and socket events
 interface Player {
   wpm: number;
@@ -92,13 +92,25 @@ export default function TypingTest() {
     });
   };
 
+
+  // set text to random paragraph of 100 words
+
+  const paragraphs = sampleParagraphs.paragraphs.map(p => p.text);
+
+  useEffect(() => {
+    setText(paragraphs[Math.floor(Math.random() * paragraphs.length)]);
+  }, []);
+
+
+
+
   useEffect(() => {
     socket.on('roomCreated', ({ roomId, isAdmin: adminStatus }: RoomEvent) => {
       setIsAdmin(adminStatus || false);
     });
 
     socket.on('roomJoined', ({ text: roomText, isAdmin: adminStatus }: RoomEvent) => {
-      setText(roomText || '');
+      // setText(roomText || '');
       setIsAdmin(adminStatus || false);
     });
 
@@ -216,7 +228,7 @@ export default function TypingTest() {
                 />
               </div>
             )}
-            {!isTestRunning && !resultsDisplayed && isAdmin && (
+            {!isTestRunning && Object.keys(players).length > 0 && !resultsDisplayed && isAdmin && (
               <Button onClick={startTest} className="w-full">Start Typing Test</Button>
             )}
             {resultsDisplayed && (
@@ -242,8 +254,7 @@ export default function TypingTest() {
                 <div key={playerId} className="p-4 bg-muted rounded-lg">
                   <p className="font-semibold">{playerId}</p>
                   <p className="text-sm">WPM: {players[playerId].wpm}</p>
-                  <p className="text-sm">Accuracy: {typeof players[playerId]?.accuracy === 'number' ? players[playerId].accuracy.toFixed(2) : 'N/A'}%</p>
-
+                  <p className="text-sm">Accuracy:{players[playerId].accuracy}%</p>
                 </div>
               ))}
             </div>
