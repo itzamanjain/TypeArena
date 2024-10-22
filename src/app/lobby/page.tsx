@@ -9,7 +9,7 @@ import { Progress } from "@/components/ui/progress";
 import { Textarea } from "@/components/ui/textarea";
 import { AlertCircle, Clock, Trophy, Users } from "lucide-react";
 import sampleParagraphs from '@/data/sampleParagraphs';
-// Define the types for players and socket events
+
 interface Player {
   wpm: number;
   accuracy: number;
@@ -26,7 +26,7 @@ interface RoomEvent {
   players?: Players;
 }
 
-const socket: Socket = io('https://typearena-backend.onrender.com/'); // Connect to the server
+const socket: Socket = io('https://typearena-backend.onrender.com/');
 
 export default function TypingTest() {
   const [roomId, setRoomId] = useState<string>('');
@@ -41,6 +41,7 @@ export default function TypingTest() {
   const [isAdmin, setIsAdmin] = useState<boolean>(false);
   const [countdown, setCountdown] = useState<number>(3);
   const [showCountdown, setShowCountdown] = useState<boolean>(false);
+  const [currentCharIndex, setCurrentCharIndex] = useState<number>(0);
 
   const createRoom = (): void => {
     const newRoomId = Math.random().toString(36).substring(2, 9);
@@ -63,20 +64,21 @@ export default function TypingTest() {
       setIsTestRunning(false);
       setResultsDisplayed(true);
       if (timer) {
-        clearInterval(timer); // Clear timer if it was set
+        clearInterval(timer);
       }
     }
     return () => {
-        if (timer) {
-          clearInterval(timer); // Clear timer in cleanup
-        }
-      };
+      if (timer) {
+        clearInterval(timer);
+      }
+    };
   }, [isTestRunning, timeLeft]);
 
   const handleTyping = (e: ChangeEvent<HTMLTextAreaElement>): void => {
     if (!isTestRunning) return;
     const input = e.target.value;
     setTypedText(input);
+    setCurrentCharIndex(input.length);
 
     const correctChars = [...input].filter((char, idx) => char === text[idx]).length;
     const newAccuracy = (correctChars / input.length) * 100 || 100;
@@ -92,17 +94,12 @@ export default function TypingTest() {
     });
   };
 
-
-  // set text to random paragraph of 100 words
-
   const paragraphs = sampleParagraphs.paragraphs.map(p => p.text);
 
   useEffect(() => {
-    setText(paragraphs[Math.floor(Math.random() * paragraphs.length)]);
+    const randomParagraph = paragraphs[Math.floor(Math.random() * paragraphs.length)];
+    setText(randomParagraph);
   }, []);
-
-
-
 
   useEffect(() => {
     socket.on('roomCreated', ({ roomId, isAdmin: adminStatus }: RoomEvent) => {
@@ -110,7 +107,6 @@ export default function TypingTest() {
     });
 
     socket.on('roomJoined', ({ text: roomText, isAdmin: adminStatus }: RoomEvent) => {
-      // setText(roomText || '');
       setIsAdmin(adminStatus || false);
     });
 
@@ -132,6 +128,7 @@ export default function TypingTest() {
       setIsTestRunning(true);
       setTimeLeft(60);
       setTypedText('');
+      setCurrentCharIndex(0);
     });
 
     socket.on('finalResults', ({ players }: RoomEvent) => {
@@ -157,10 +154,28 @@ export default function TypingTest() {
     }
   };
 
+  const renderColorCodedText = () => {
+    return text.split('').map((char, index) => {
+      let className = 'text-muted-foreground';
+      
+      if (index < currentCharIndex) {
+        className = typedText[index] === char ? 'text-green-500' : 'text-red-500';
+      } else if (index === currentCharIndex) {
+        className = 'bg-yellow-200';
+      }
+
+      return (
+        <span key={index} className={className}>
+          {char}
+        </span>
+      );
+    });
+  };
+
   return (
     <div className="container mx-auto p-4">
       <h1 className="text-3xl font-bold mb-6 text-center">Typing Test Room</h1>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="flex flex-col gap-10">
         <Card>
           <CardHeader>
             <CardTitle>Room Controls</CardTitle>
@@ -214,9 +229,11 @@ export default function TypingTest() {
                   </div>
                 </div>
                 <Progress value={(typedText.length / text.length) * 100} className="w-full" />
-                <div className="p-2 bg-muted rounded-md mb-2">
-                  <p className="text-sm font-medium">Sample Text:</p>
-                  <p>{text}</p>
+                <div className="p-2 bg-muted rounded-md mb-2 overflow-x-hidden">
+                  <p className="text-sm font-medium mb-1">Sample Text:</p>
+                  <p className="whitespace-pre-wrap break-all text-lg leading-relaxed">
+                    {renderColorCodedText()}
+                  </p>
                 </div>
                 <Textarea
                   value={typedText}
@@ -254,7 +271,7 @@ export default function TypingTest() {
                 <div key={playerId} className="p-4 bg-muted rounded-lg">
                   <p className="font-semibold">{playerId}</p>
                   <p className="text-sm">WPM: {players[playerId].wpm}</p>
-                  <p className="text-sm">Accuracy:{players[playerId].accuracy}%</p>
+                  {/* <p className="text-sm">Accuracy: {players[playerId].accuracy.toFixed(2)}%</p> */}
                 </div>
               ))}
             </div>
