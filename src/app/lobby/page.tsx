@@ -94,6 +94,15 @@ export default function TypingTest() {
     });
   };
 
+  const handlePaste = (event: React.ClipboardEvent<HTMLTextAreaElement>) => {
+    event.preventDefault();
+  };
+
+  const handleContextMenu = (event: React.MouseEvent<HTMLTextAreaElement>) => {
+    event.preventDefault();
+  };
+
+
   const paragraphs = sampleParagraphs.paragraphs.map(p => p.text);
 
   useEffect(() => {
@@ -172,6 +181,7 @@ export default function TypingTest() {
     });
   };
 
+
   return (
     <div className="container mx-auto p-4">
       <h1 className="text-3xl font-bold mb-6 text-center">Typing Test Room</h1>
@@ -242,6 +252,8 @@ export default function TypingTest() {
                   rows={5}
                   className="w-full resize-none"
                   disabled={!isTestRunning}
+                  onPaste={handlePaste}
+                  onContextMenu={handleContextMenu}
                 />
               </div>
             )}
