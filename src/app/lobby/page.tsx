@@ -192,7 +192,7 @@ export default function TypingTest() {
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              <Button onClick={createRoom} className="w-full">Create Room</Button>
+              <Button onClick={createRoom} className="w-full text-white hover:bg-teal-600 bg-teal-500">Create Room</Button>
               {roomId && (
                 <div className="p-2 bg-muted rounded-md">
                   <p className="text-sm">Share this room ID with others:</p>
@@ -258,7 +258,7 @@ export default function TypingTest() {
               </div>
             )}
             {!isTestRunning && Object.keys(players).length > 0 && !resultsDisplayed && isAdmin && (
-              <Button onClick={startTest} className="w-full">Start Typing Test</Button>
+              <Button onClick={startTest} className="w-full text-white bg-teal-500 hover:bg-teal-600">Start Typing Test</Button>
             )}
             {resultsDisplayed && (
               <div className="space-y-2">

@@ -4,7 +4,7 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { Button } from "@/components/ui/button"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
-import { Menu } from 'lucide-react'
+import { ArrowRight, Menu } from 'lucide-react'
 import useAuthStore from '@/store/useStore'
 import { useRouter } from 'next/navigation'
 import axios from 'axios'
@@ -36,10 +36,12 @@ export function Navbar() {
   }
 
   return (
-    <header className="container mx-auto px-4 py-6 border-b">
+    <header className="container mx-auto px-4 py-6 border-b ">
       <nav className="flex justify-between items-center">
         <h1 className="text-2xl dark:text-white font-bold text-gray-900">
-          <Link href='/'>TypeArena</Link>
+        <Link href="/" className="text-2xl font-semibold text-teal-500">
+            TypeArena
+          </Link>
         </h1>
         <div className="hidden md:flex justify-center items-center space-x-6">
           <NavItems />
@@ -47,9 +49,13 @@ export function Navbar() {
           {isAuthenticated ? (
             <Button onClick={handleLogout}>Logout</Button>
           ) : (
-            <Button>
-              <Link href="/signup">Join Now</Link>
-            </Button>
+            <Link
+            href="/signup"
+            className="text-sm bg-teal-500 text-white px-4 py-2 rounded-full hover:bg-teal-600 transition-colors flex items-center"
+          >
+            Join Now
+            <ArrowRight className="ml-1 h-4 w-4" />
+          </Link>
           )}
         </div>
         <Sheet open={isOpen} onOpenChange={setIsOpen}>
