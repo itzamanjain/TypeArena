@@ -47,7 +47,7 @@ export function Navbar() {
           <NavItems />
           {/* Conditional Rendering for Auth Button */}
           {isAuthenticated ? (
-            <Button onClick={handleLogout}>Logout</Button>
+            <Button className=' bg-teal-500 text-white' onClick={handleLogout}>Logout</Button>
           ) : (
             <Link
             href="/signup"
@@ -69,7 +69,7 @@ export function Navbar() {
               <NavItems />
               {/* Conditional Rendering for Auth Button */}
               {isAuthenticated ? (
-                <Button onClick={handleLogout}>Logout</Button>
+                <Button className='bg-teal-500 text-white' onClick={handleLogout}>Logout</Button>
               ) : (
                 <Link href="/signup">Join Now</Link>
               )}
