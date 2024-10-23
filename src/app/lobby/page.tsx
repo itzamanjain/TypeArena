@@ -10,6 +10,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { AlertCircle, Clock, Trophy, Users } from "lucide-react";
 import sampleParagraphs from '@/data/sampleParagraphs';
 
+
 interface Player {
   wpm: number;
   accuracy: number;
@@ -308,5 +309,6 @@ export default function TypingTest() {
         
       </div>
     </div>
+    
   );
 }
