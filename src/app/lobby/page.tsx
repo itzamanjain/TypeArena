@@ -42,6 +42,8 @@ export default function TypingTest() {
   const [countdown, setCountdown] = useState<number>(3);
   const [showCountdown, setShowCountdown] = useState<boolean>(false);
   const [currentCharIndex, setCurrentCharIndex] = useState<number>(0);
+  const [isJoining,setIsJoining] = useState<boolean>(false);
+
 
   const createRoom = (): void => {
     const newRoomId = Math.random().toString(36).substring(2, 9);
@@ -50,8 +52,14 @@ export default function TypingTest() {
   };
 
   const joinRoom = (id: string): void => {
+    setIsJoining(true);
     setRoomId(id);
     socket.emit('joinRoom', { roomId: id });
+    // after some time set isJoining to false
+    setTimeout(() => {
+      setIsJoining(false);
+    }, 2000);
+    
   };
 
   useEffect(() => {
@@ -117,6 +125,7 @@ export default function TypingTest() {
 
     socket.on('roomJoined', ({ text: roomText, isAdmin: adminStatus }: RoomEvent) => {
       setIsAdmin(adminStatus || false);
+
     });
 
     socket.on('updateLeaderboard', ({ players }: RoomEvent) => {
@@ -125,6 +134,7 @@ export default function TypingTest() {
 
     socket.on('playerJoined', ({ players }: RoomEvent) => {
       setPlayers(players || {});
+
     });
 
     socket.on('countdown', ({ count }: { count: number }) => {
@@ -183,10 +193,11 @@ export default function TypingTest() {
 
 
   return (
-    <div className="container mx-auto p-4">
+    <div className="container mx-auto p-4 min-h-screen">
       <h1 className="text-3xl font-bold mb-6 text-center">Typing Test Room</h1>
       <div className="flex flex-col gap-10">
-        <Card>
+        <div className='flex flex-col md:flex-row justify-between gap-2'>
+        <Card className='w-full'>
           <CardHeader>
             <CardTitle>Room Controls</CardTitle>
           </CardHeader>
@@ -205,11 +216,35 @@ export default function TypingTest() {
                   placeholder="Enter Room ID"
                   onChange={(e) => setRoomId(e.target.value)}
                 />
-                <Button variant="outline" onClick={() => joinRoom(roomId)}>Join</Button>
+                <Button variant="outline" onClick={() => joinRoom(roomId)}>{isJoining ? "Joining" : "Join"}</Button>
               </div>
             </div>
           </CardContent>
         </Card>
+        
+        <Card className="md:col-span-2 w-full">
+          <CardHeader>
+            <CardTitle className="flex items-center space-x-2">
+              <Users className="w-5 h-5" />
+              <span>Leaderboard</span>
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="flex flex-col gap-2 overflow-y-scroll max-h-[200px]">
+              {Object.keys(players).length > 0  && <div className='flex justify-between'>
+              <p className='ml-3'>Player Id</p>
+              <p className='mr-4'>Speed</p>
+              </div>}
+              {Object.keys(players).map((playerId) => (
+                <div key={playerId} className="p-4 flex bg-gray-50 justify-between rounded-lg">
+                  <p className="font-semibold break-words text-sm mb-1">{playerId.slice(0,6).toLowerCase()}</p>
+                  <p className="text-sm">WPM: {players[playerId].wpm}</p>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+        </div>
 
         <Card>
           <CardHeader>
@@ -270,25 +305,7 @@ export default function TypingTest() {
           </CardContent>
         </Card>
 
-        <Card className="md:col-span-2">
-          <CardHeader>
-            <CardTitle className="flex items-center space-x-2">
-              <Users className="w-5 h-5" />
-              <span>Leaderboard</span>
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-              {Object.keys(players).map((playerId) => (
-                <div key={playerId} className="p-4 bg-muted rounded-lg">
-                  <p className="font-semibold">{playerId}</p>
-                  <p className="text-sm">WPM: {players[playerId].wpm}</p>
-                  {/* <p className="text-sm">Accuracy: {players[playerId].accuracy.toFixed(2)}%</p> */}
-                </div>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
+        
       </div>
     </div>
   );
