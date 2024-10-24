@@ -410,16 +410,6 @@ const TypingTest: React.FC = () => {
       {/* Header */}
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-3xl font-bold ">Typing Speed Test</h1>
-        <div className="flex items-center space-x-2">
-          <span className="text-sm">
-            {theme === "light" ? "Light" : "Dark"} Mode
-          </span>
-          <Switch
-            checked={theme === "dark"}
-            onChange={(checked) => setTheme(checked ? "dark" : "light")}
-            label="Toggle Theme"
-          />
-        </div>
       </div>
 
       {/* Typing Test Card */}
