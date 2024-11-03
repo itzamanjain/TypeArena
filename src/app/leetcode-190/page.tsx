@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { patterns } from '@/data/pattern';
 import { Badge } from '@/components/ui/badge';
 import { Card } from '@/components/ui/card';
@@ -23,6 +23,20 @@ export default function Home() {
   const totalQuestions = patterns.length;
   const completedCount = completedQuestions.size;
 
+  useEffect(() => {
+    // Load completed questions from local storage
+    const storedCompleted = getFromLocalStorage('completedQuestions');
+    if (storedCompleted) {
+      setCompletedQuestions(new Set(storedCompleted));
+    }
+
+    // Load notes from local storage
+    const storedNotes = getFromLocalStorage('questionNotes');
+    if (storedNotes) {
+      setNotes(storedNotes);
+    }
+  }, []);
+
   const handleCheckQuestion = (id: string) => {
     const newCompleted = new Set(completedQuestions);
     if (newCompleted.has(id)) {
@@ -31,13 +45,43 @@ export default function Home() {
       newCompleted.add(id);
     }
     setCompletedQuestions(newCompleted);
-    localStorage.setItem('completedQuestions', JSON.stringify([...newCompleted]));
+    saveToLocalStorage('completedQuestions', [...newCompleted]);
   };
 
   const handleNoteChange = (id: string, note: string) => {
     const newNotes = { ...notes, [id]: note };
     setNotes(newNotes);
-    localStorage.setItem('questionNotes', JSON.stringify(newNotes));
+    saveToLocalStorage('questionNotes', newNotes);
+  };
+
+  const saveToDatabase = async (questionId: string, notes: string, status: string) => {
+    try {
+      const response = await fetch('/api/save', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ questionId, notes, status }),
+      });
+  
+      if (!response.ok) {
+        throw new Error('Failed to save data');
+      }
+  
+      const result = await response.json();
+      console.log('Save successful:', result);
+    } catch (error) {
+      console.error('Error saving data:', error);
+    }
+  };
+
+  const saveToLocalStorage = (key: string, value: any) => {
+    localStorage.setItem(key, JSON.stringify(value));
+  };
+  
+  const getFromLocalStorage = (key: string) => {
+    const value = localStorage.getItem(key);
+    return value ? JSON.parse(value) : null;
   };
 
   return (
@@ -89,6 +133,7 @@ export default function Home() {
                   </TableCell>
                   <TableCell>
                     <Input
+                      className="w-full word-break"
                       placeholder="Add notes..."
                       value={notes[question.id] || ''}
                       onChange={(e) => handleNoteChange(question.id, e.target.value)}
