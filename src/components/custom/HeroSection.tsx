@@ -57,7 +57,7 @@ export default function TypeArenaLanding() {
           Compete in real-time with friends and players worldwide. <br /> Track your progress and master every keystroke.
           </p>
           <Link
-            href="/lobby"
+            href="/playground"
             className="bg-teal-500 text-white px-8 py-3 rounded-full hover:bg-teal-600 transition-colors inline-flex items-center text-lg font-medium"
           >
             Start Typing Now
