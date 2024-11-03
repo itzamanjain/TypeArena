@@ -17,6 +17,9 @@ const NavItems = () => (
     <Link href="/lobby" className="text-gray-600 dark:text-white hover:text-gray-900 transition-colors">
       Play with friends
     </Link>
+    <Link href="/leetcode-190" className="text-gray-600 dark:text-white hover:text-gray-900 transition-colors">
+     Leetcode 190
+    </Link>
   </>
 )
 
