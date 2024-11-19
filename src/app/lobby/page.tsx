@@ -6,8 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
-import { Textarea } from "@/components/ui/textarea";
-import { AlertCircle, Clock, Trophy, Users } from "lucide-react";
+import { AlertCircle, Clock, Trophy, Users } from 'lucide-react';
 import sampleParagraphs from '@/data/sampleParagraphs';
 
 interface Player {
@@ -41,9 +40,7 @@ export default function TypingTest() {
   const [isAdmin, setIsAdmin] = useState<boolean>(false);
   const [countdown, setCountdown] = useState<number>(3);
   const [showCountdown, setShowCountdown] = useState<boolean>(false);
-  const [currentCharIndex, setCurrentCharIndex] = useState<number>(0);
-  const [isJoining,setIsJoining] = useState<boolean>(false);
-
+  const [isJoining, setIsJoining] = useState<boolean>(false);
 
   const createRoom = (): void => {
     const newRoomId = Math.random().toString(36).substring(2, 9);
@@ -55,11 +52,9 @@ export default function TypingTest() {
     setIsJoining(true);
     setRoomId(id);
     socket.emit('joinRoom', { roomId: id });
-    // after some time set isJoining to false
     setTimeout(() => {
       setIsJoining(false);
     }, 2000);
-    
   };
 
   useEffect(() => {
@@ -86,7 +81,6 @@ export default function TypingTest() {
     if (!isTestRunning) return;
     const input = e.target.value;
     setTypedText(input);
-    setCurrentCharIndex(input.length);
 
     const correctChars = [...input].filter((char, idx) => char === text[idx]).length;
     const newAccuracy = (correctChars / input.length) * 100 || 100;
@@ -102,15 +96,6 @@ export default function TypingTest() {
     });
   };
 
-  const handlePaste = (event: React.ClipboardEvent<HTMLTextAreaElement>) => {
-    event.preventDefault();
-  };
-
-  const handleContextMenu = (event: React.MouseEvent<HTMLTextAreaElement>) => {
-    event.preventDefault();
-  };
-
-
   const paragraphs = sampleParagraphs.paragraphs.map(p => p.text);
 
   useEffect(() => {
@@ -125,7 +110,6 @@ export default function TypingTest() {
 
     socket.on('roomJoined', ({ text: roomText, isAdmin: adminStatus }: RoomEvent) => {
       setIsAdmin(adminStatus || false);
-
     });
 
     socket.on('updateLeaderboard', ({ players }: RoomEvent) => {
@@ -134,7 +118,6 @@ export default function TypingTest() {
 
     socket.on('playerJoined', ({ players }: RoomEvent) => {
       setPlayers(players || {});
-
     });
 
     socket.on('countdown', ({ count }: { count: number }) => {
@@ -147,7 +130,6 @@ export default function TypingTest() {
       setIsTestRunning(true);
       setTimeLeft(60);
       setTypedText('');
-      setCurrentCharIndex(0);
     });
 
     socket.on('finalResults', ({ players }: RoomEvent) => {
@@ -173,77 +155,60 @@ export default function TypingTest() {
     }
   };
 
-  const renderColorCodedText = () => {
-    return text.split('').map((char, index) => {
-      let className = 'text-muted-foreground';
-      
-      if (index < currentCharIndex) {
-        className = typedText[index] === char ? 'text-green-500' : 'text-red-500';
-      } else if (index === currentCharIndex) {
-        className = 'bg-yellow-200';
-      }
-
-      return (
-        <span key={index} className={className}>
-          {char}
-        </span>
-      );
-    });
-  };
-
-
   return (
     <div className="container mx-auto p-4 min-h-screen">
       <h1 className="text-3xl font-bold mb-6 text-center">Typing Test Room</h1>
       <div className="flex flex-col gap-10">
         <div className='flex flex-col md:flex-row justify-between gap-2'>
-        <Card className='w-full'>
-          <CardHeader>
-            <CardTitle>Room Controls</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-              <Button onClick={createRoom} className="w-full text-white hover:bg-teal-600 bg-teal-500">Create Room</Button>
-              {roomId && (
-                <div className="p-2 bg-muted rounded-md">
-                  <p className="text-sm">Share this room ID with others:</p>
-                  <p className="font-mono text-lg">{roomId}</p>
+          <Card className='w-full md:w-1/2'>
+            <CardHeader>
+              <CardTitle>Room Controls</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                <Button onClick={createRoom} className="w-full text-white hover:bg-teal-600 bg-teal-500">Create Room</Button>
+                {roomId && (
+                  <div className="p-2 bg-muted rounded-md">
+                    <p className="text-sm">Share this room ID with others:</p>
+                    <p className="font-mono text-lg">{roomId}</p>
+                  </div>
+                )}
+                <div className="flex space-x-2">
+                  <Input
+                    type="text"
+                    placeholder="Enter Room ID"
+                    onChange={(e) => setRoomId(e.target.value)}
+                  />
+                  <Button variant="outline" onClick={() => joinRoom(roomId)}>{isJoining ? "Joining" : "Join"}</Button>
                 </div>
-              )}
-              <div className="flex space-x-2">
-                <Input
-                  type="text"
-                  placeholder="Enter Room ID"
-                  onChange={(e) => setRoomId(e.target.value)}
-                />
-                <Button variant="outline" onClick={() => joinRoom(roomId)}>{isJoining ? "Joining" : "Join"}</Button>
               </div>
-            </div>
-          </CardContent>
-        </Card>
-        
-        <Card className="md:col-span-2 w-full">
-          <CardHeader>
-            <CardTitle className="flex items-center space-x-2">
-              <Users className="w-5 h-5" />
-              <span>Leaderboard</span>
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="flex flex-col gap-2 overflow-y-scroll max-h-[200px]">
-              {Object.keys(players).length > 0  && <div className='flex justify-between'>
-              <p className='ml-3'>Player Id</p>
-              <p className='mr-4'>Speed</p>
-              </div>}
-              {Object.keys(players).map((playerId) => (
-                <div key={playerId} className="p-4 flex bg-gray-50 justify-between rounded-lg">
-                  <p className="font-semibold break-words text-sm mb-1">{playerId.slice(0,6).toLowerCase()}</p>
-                  <p className="text-sm">WPM: {players[playerId].wpm}</p>
-                </div>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
+            </CardContent>
+          </Card>
+          
+          <Card className="w-full md:w-1/2">
+            <CardHeader>
+              <CardTitle className="flex items-center space-x-2">
+                <Users className="w-5 h-5" />
+                <span>Leaderboard</span>
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="flex flex-col gap-2 overflow-y-auto max-h-[200px]">
+                {Object.keys(players).length > 0 && (
+                  <div className='flex justify-between text-sm font-semibold mb-2'>
+                    <span className='ml-3'>Player ID</span>
+                    <span className='mr-4'>Speed (WPM)</span>
+                  </div>
+                )}
+                {Object.entries(players).map(([playerId, player]) => (
+                  <div key={playerId} className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                    <span className="font-medium text-sm">{playerId.slice(0,6).toLowerCase()}</span>
+                    <span className="text-sm">{player.wpm}</span>
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
         </div>
 
         <Card>
@@ -274,29 +239,51 @@ export default function TypingTest() {
                   </div>
                 </div>
                 <Progress value={(typedText.length / text.length) * 100} className="w-full" />
-                <div className="p-2 bg-muted rounded-md mb-2 overflow-x-hidden">
-                  <p className="text-sm font-medium mb-1">Sample Text:</p>
-                  <p className="whitespace-pre-wrap break-all text-lg leading-relaxed">
-                    {renderColorCodedText()}
-                  </p>
-                </div>
-                <Textarea
-                  value={typedText}
-                  onChange={handleTyping}
-                  placeholder="Start typing..."
-                  rows={5}
-                  className="w-full resize-none"
-                  disabled={!isTestRunning}
-                  onPaste={handlePaste}
-                  onContextMenu={handleContextMenu}
-                />
+                <div className="relative min-h-[200px] w-full rounded-lg border bg-background p-4 font-mono text-base">
+              {/* Background sample text */}
+              <div 
+                className="absolute inset-0 p-4 pointer-events-none whitespace-pre-wrap break-words leading-relaxed tracking-wide text-gray-500 "
+                style={{ wordSpacing: '0.25em' }}
+                aria-hidden="true"
+              >
+                {text}
+              </div>
+              
+              {/* Colored overlay for typed text */}
+              <div 
+                className="absolute inset-0 p-4 pointer-events-none whitespace-pre-wrap break-words leading-relaxed tracking-wide"
+                style={{ wordSpacing: '0.25em' }}
+                aria-hidden="true"
+              >
+                {typedText.split('').map((char, index) => (
+                  <span 
+                    key={index}
+                    className={char === text[index] ? "text-green-500" : "text-red-500"}
+                  >
+                    {char}
+                  </span>
+                ))}
+              </div>
+
+              {/* Input textarea */}
+              <textarea
+                value={typedText}
+                onChange={handleTyping}
+                className="relative h-full  w-full text-transparent caret-black resize-none bg-transparent p-0 font-inherit leading-relaxed tracking-wide focus:outline-none focus:ring-0"
+                style={{ wordSpacing: '0.25em' }}
+                placeholder=""
+                disabled={!isTestRunning}
+                onPaste={(e) => e.preventDefault()}
+                onContextMenu={(e) => e.preventDefault()}
+              />
+              </div>
               </div>
             )}
             {!isTestRunning && Object.keys(players).length > 0 && !resultsDisplayed && isAdmin && (
               <Button onClick={startTest} className="w-full text-white bg-teal-500 hover:bg-teal-600">Start Typing Test</Button>
             )}
             {resultsDisplayed && (
-              <div className="space-y-2">
+              <div className="space-y-2 mt-4">
                 <h2 className="text-2xl font-semibold">Final Results</h2>
                 <p className="text-lg">Your WPM: <span className="font-bold">{wpm}</span></p>
                 <p className="text-lg">Your Accuracy: <span className="font-bold">{accuracy.toFixed(2)}%</span></p>
@@ -304,8 +291,6 @@ export default function TypingTest() {
             )}
           </CardContent>
         </Card>
-
-        
       </div>
     </div>
   );
