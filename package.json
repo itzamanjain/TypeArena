@@ -22,7 +22,7 @@
     "bcryptjs": "^2.4.3",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
-    "framer-motion": "^11.11.8",
+    "framer-motion": "^11.15.0",
     "jsonwebtoken": "^9.0.2",
     "lucide-react": "^0.447.0",
     "mongoose": "^8.7.1",
@@ -31,7 +31,7 @@
     "react": "^18",
     "react-dom": "^18",
     "socket.io-client": "^4.8.0",
-    "tailwind-merge": "^2.5.3",
+    "tailwind-merge": "^2.5.5",
     "tailwindcss-animate": "^1.0.7",
     "zustand": "^5.0.0"
   },

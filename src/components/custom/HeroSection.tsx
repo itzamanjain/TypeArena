@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { Keyboard, Timer, Trophy, Users, BarChart, Target, Zap, Coffee, ArrowRight } from 'lucide-react'
 import { Button } from '../ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { AnimatedTooltipPreview } from './AnimatedTooltip'
 
 export default function TypeArenaLanding() {
   return (
@@ -65,25 +66,7 @@ export default function TypeArenaLanding() {
           </Link>
         </div>
 
-        {/* Features */}
-        <div className="w-full max-w-4xl grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
-          <div className="bg-white p-6 rounded-lg shadow-md flex flex-col items-center text-center">
-            <Zap className="h-12 w-12 text-teal-500 mb-4" />
-            <h3 className="text-xl font-semibold mb-2">Improve Speed</h3>
-            <p className="text-gray-600">Track your progress and watch your WPM soar with our targeted exercises.</p>
-          </div>
-          <div className="bg-white p-6 rounded-lg shadow-md flex flex-col items-center text-center">
-            <Users className="h-12 w-12 text-teal-500 mb-4" />
-            <h3 className="text-xl font-semibold mb-2">Compete with Friends</h3>
-            <p className="text-gray-600">Create or join rooms to challenge your friends in real-time typing battles.</p>
-          </div>
-          <div className="bg-white p-6 rounded-lg shadow-md flex flex-col items-center text-center">
-            <Trophy className="h-12 w-12 text-teal-500 mb-4" />
-            <h3 className="text-xl font-semibold mb-2">Climb the Ranks</h3>
-            <p className="text-gray-600">Earn points, unlock achievements, and top the global leaderboard.</p>
-          </div>
-        </div>
-
+        
         {/* Call to Action */}
 
         <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
@@ -125,7 +108,7 @@ export default function TypeArenaLanding() {
           </Card>
         </section>
 
-        <section className="bg-gray-50 rounded-lg p-8 mb-16">
+        <section className=" rounded-lg p-8 mb-16">
           <h3 className="text-3xl font-bold text-gray-900 mb-6">Why Choose TypeArena?</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div className="flex items-start">
@@ -161,14 +144,8 @@ export default function TypeArenaLanding() {
 
         <section className="text-center mb-16">
           <h3 className="text-3xl font-bold text-gray-900 mb-6">Join Thousands of Happy Typists</h3>
-          <div className="flex flex-wrap justify-center gap-4 mb-8">
-            {[...Array(5)].map((_, i) => (
-              <div key={i} className="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center">
-                <span className="text-xl font-bold text-gray-600">
-                  {String.fromCharCode(65 + i)}
-                </span>
-              </div>
-            ))}
+          <div className="flex flex-wrap justify-center gap-4 ">
+           <AnimatedTooltipPreview />
           </div>
           <p className="text-gray-600 text-xl mb-8">
             &quot;TypeArena has transformed my typing speed and accuracy. I&apos;ve never had so much fun improving my skills!&quot;
@@ -186,7 +163,7 @@ export default function TypeArenaLanding() {
               <Link href='/signup'>Sign Up Now</Link>
             </Button>
             <Button size="lg" variant="outline" className="border-gray-300 text-gray-600 hover:bg-gray-50">
-              Learn More
+              <Link href='/about'>Learn More</Link>
             </Button>
           </div>
         </section>

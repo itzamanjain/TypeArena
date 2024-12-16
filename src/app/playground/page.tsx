@@ -168,9 +168,7 @@ export default function TypingTest() {
 
       <Card>
         <CardHeader>
-          <Button onClick={startGame} className=" text-white mb-5 text-md bg-teal-500 hover:bg-teal-600">
-            {isGameStarted ? "Restart Test" : "Start Test"}
-          </Button>
+         
           <CardTitle>
             {isGameStarted && (
               <div className="flex justify-between items-center">
@@ -189,9 +187,9 @@ export default function TypingTest() {
             value={typedText}
             onChange={handleTyping}
             onPaste={handlePaste}
-            placeholder="Start typing..."
+            placeholder="Start Typing Here ......"
             disabled={!isGameStarted || wordCount >= WORD_LIMIT}
-            className="mb-2 text-lg w-full h-20 resize-none overflow-y-auto whitespace-pre-wrap"
+            className="mb-2 text-lg text-black w-full h-20 resize-none overflow-y-auto whitespace-pre-wrap"
             style={{ lineHeight: "1.5", padding: "8px" }}
           />
           <div className="text-sm text-muted-foreground">
@@ -207,7 +205,9 @@ export default function TypingTest() {
           )}
         </CardContent>
         <CardFooter>
-
+        <Button onClick={startGame} className=" text-white mb-5 text-xl bg-teal-500 hover:bg-teal-600">
+            {isGameStarted ? "Restart Test" : "Start Test"}
+          </Button>
         </CardFooter>
       </Card>
 
