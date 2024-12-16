@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState, useEffect, ChangeEvent } from 'react';
@@ -258,7 +259,11 @@ export default function TypingTest() {
                 {typedText.split('').map((char, index) => (
                   <span 
                     key={index}
-                    className={char === text[index] ? "text-green-500" : "text-red-500"}
+                    className={
+                      char === text[index]
+                        ? "text-green-500/70" 
+                        : "text-foreground opacity-50" 
+                    }
                   >
                     {char}
                   </span>
