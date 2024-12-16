@@ -2,11 +2,22 @@ import { connectDb } from "@/dbconfig/dbconfig";
 import User from "@/models/user.model"
 import { NextRequest, NextResponse } from "next/server";
 import bcryptjs from "bcryptjs";
+import { rateLimit } from "@/lib/ratelimit";
+
 
 connectDb();
 
 export async function POST(request:NextRequest){
     try {
+        
+        // 5 signup requests per day
+        if(!rateLimit(request)){
+            return NextResponse.json(
+                { message: "Rate limit exceeded" },
+                { status: 429 }
+            );
+        }
+
         const reqBody = await request.json();
         console.log("requsest received",reqBody);
         
