@@ -37,7 +37,7 @@ export function Navbar() {
   }
 
   return (
-    <header className="container mx-auto px-4 py-6 border-b ">
+    <header className=" mx-auto p-6 border-b  w-full ">
       <nav className="flex justify-between items-center">
         <h1 className="text-2xl dark:text-white font-bold text-gray-900">
         <Link href="/" className="text-2xl font-semibold text-teal-500">
