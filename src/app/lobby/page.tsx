@@ -185,7 +185,7 @@ export default function TypingTest() {
               </div>
             </CardContent>
           </Card>
-          
+
           <Card className="w-full md:w-1/2">
             <CardHeader>
               <CardTitle className="flex items-center space-x-2">
@@ -203,7 +203,7 @@ export default function TypingTest() {
                 )}
                 {Object.entries(players).map(([playerId, player]) => (
                   <div key={playerId} className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
-                    <span className="font-medium text-sm">{playerId.slice(0,6).toLowerCase()}</span>
+                    <span className="font-medium text-sm">{playerId.slice(0, 6).toLowerCase()}</span>
                     <span className="text-sm">{player.wpm}</span>
                   </div>
                 ))}
@@ -214,88 +214,101 @@ export default function TypingTest() {
 
         <Card>
           <CardHeader>
-            <CardTitle>Typing Test</CardTitle>
+            <CardTitle className="text-2xl font-bold">Typing Test</CardTitle>
           </CardHeader>
           <CardContent>
             {showCountdown && (
               <div className="text-center">
-                <h2 className="text-6xl font-bold mb-2">{countdown}</h2>
-                <p className="text-muted-foreground">Get ready...</p>
+                <h2 className="text-7xl font-extrabold mb-4">{countdown}</h2>
+                <p className="text-lg text-muted-foreground">Get ready...</p>
               </div>
             )}
             {(isTestRunning || resultsDisplayed) && (
-              <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center space-x-2">
-                    <Clock className="w-5 h-5" />
-                    <span className="font-semibold">{timeLeft}s</span>
+              <div className="space-y-6">
+                <div className="flex items-center justify-between text-lg font-medium">
+                  <div className="flex items-center space-x-3">
+                    <Clock className="w-6 h-6" />
+                    <span>{timeLeft}s</span>
                   </div>
-                  <div className="flex items-center space-x-2">
-                    <AlertCircle className="w-5 h-5" />
-                    <span className="font-semibold">{accuracy.toFixed(2)}%</span>
+                  <div className="flex items-center space-x-3">
+                    <AlertCircle className="w-6 h-6" />
+                    <span>{accuracy.toFixed(2)}%</span>
                   </div>
-                  <div className="flex items-center space-x-2">
-                    <Trophy className="w-5 h-5" />
-                    <span className="font-semibold">{wpm} WPM</span>
+                  <div className="flex items-center space-x-3">
+                    <Trophy className="w-6 h-6" />
+                    <span>{wpm} WPM</span>
                   </div>
                 </div>
-                <Progress value={(typedText.length / text.length) * 100} className="w-full" />
-                <div className="relative min-h-[200px] w-full rounded-lg border bg-background p-4 font-mono text-base">
-              {/* Background sample text */}
-              <div 
-                className="absolute inset-0 p-4 pointer-events-none whitespace-pre-wrap break-words leading-relaxed tracking-wide text-gray-500 "
-                style={{ wordSpacing: '0.25em' }}
-                aria-hidden="true"
-              >
-                {text}
-              </div>
-              
-              {/* Colored overlay for typed text */}
-              <div 
-                className="absolute inset-0 p-4 pointer-events-none whitespace-pre-wrap break-words leading-relaxed tracking-wide"
-                style={{ wordSpacing: '0.25em' }}
-                aria-hidden="true"
-              >
-                {typedText.split('').map((char, index) => (
-                  <span 
-                    key={index}
-                    className={
-                      char === text[index]
-                        ? "text-green-500/70" 
-                        : "text-foreground opacity-50" 
-                    }
+                <Progress
+                  value={(typedText.length / text.length) * 100}
+                  className="w-full h-4 rounded-full"
+                />
+                <div className="relative min-h-[200px] w-full rounded-lg border bg-background p-4 font-mono text-2xl">
+                  {/* Background sample text */}
+                  <div
+                    className="absolute inset-0 p-4 pointer-events-none whitespace-pre-wrap break-words leading-relaxed tracking-wide text-gray-500"
+                    style={{ wordSpacing: '0.25em' }}
+                    aria-hidden="true"
                   >
-                    {char}
-                  </span>
-                ))}
-              </div>
+                    {text}
+                  </div>
 
-              {/* Input textarea */}
-              <textarea
-                value={typedText}
-                onChange={handleTyping}
-                className="relative h-full  w-full text-transparent caret-black resize-none bg-transparent p-0 font-inherit leading-relaxed tracking-wide focus:outline-none focus:ring-0"
-                style={{ wordSpacing: '0.25em' }}
-                placeholder=""
-                disabled={!isTestRunning}
-                onPaste={(e) => e.preventDefault()}
-                onContextMenu={(e) => e.preventDefault()}
-              />
-              </div>
+                  {/* Colored overlay for typed text */}
+                  <div
+                    className="absolute inset-0 p-4 pointer-events-none whitespace-pre-wrap break-words leading-relaxed tracking-wide"
+                    style={{ wordSpacing: '0.25em' }}
+                    aria-hidden="true"
+                  >
+                    {typedText.split('').map((char, index) => (
+                      <span
+                        key={index}
+                        className={
+                          char === text[index]
+                            ? "text-green-500/70"
+                            : "text-foreground opacity-50"
+                        }
+                      >
+                        {char}
+                      </span>
+                    ))}
+                  </div>
+
+                  {/* Input textarea */}
+                  <textarea
+                    value={typedText}
+                    onChange={handleTyping}
+                    className="relative h-full w-full text-transparent caret-black caret-blink resize-none bg-transparent p-0 font-inherit leading-relaxed tracking-wide focus:outline-none focus:ring-0"
+                    style={{ wordSpacing: '0.25em' }}
+                    placeholder=""
+                    disabled={!isTestRunning}
+                    onPaste={(e) => e.preventDefault()}
+                    onContextMenu={(e) => e.preventDefault()}
+                  />
+                </div>
               </div>
             )}
             {!isTestRunning && Object.keys(players).length > 0 && !resultsDisplayed && isAdmin && (
-              <Button onClick={startTest} className="w-full text-white bg-teal-500 hover:bg-teal-600">Start Typing Test</Button>
+              <Button
+                onClick={startTest}
+                className="w-full text-white text-lg py-3 bg-teal-500 hover:bg-teal-600"
+              >
+                Start Typing Test
+              </Button>
             )}
             {resultsDisplayed && (
-              <div className="space-y-2 mt-4">
-                <h2 className="text-2xl font-semibold">Final Results</h2>
-                <p className="text-lg">Your WPM: <span className="font-bold">{wpm}</span></p>
-                <p className="text-lg">Your Accuracy: <span className="font-bold">{accuracy.toFixed(2)}%</span></p>
+              <div className="space-y-4 mt-6">
+                <h2 className="text-3xl font-bold">Final Results</h2>
+                <p className="text-xl">
+                  Your WPM: <span className="font-bold">{wpm}</span>
+                </p>
+                <p className="text-xl">
+                  Your Accuracy: <span className="font-bold">{accuracy.toFixed(2)}%</span>
+                </p>
               </div>
             )}
           </CardContent>
         </Card>
+
       </div>
     </div>
   );
