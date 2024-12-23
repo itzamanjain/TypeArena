@@ -185,7 +185,7 @@ export default function TypingTest() {
               </div>
             </CardContent>
           </Card>
-
+          {/* ------------------------------------ */}
           <Card className="w-full md:w-1/2">
             <CardHeader>
               <CardTitle className="flex items-center space-x-2">
@@ -244,28 +244,21 @@ export default function TypingTest() {
                   className="w-full h-4 rounded-full"
                 />
                 <div className="relative min-h-[200px] w-full rounded-lg border bg-background p-4 font-mono text-2xl">
-                  {/* Background sample text */}
-                  <div
-                    className="absolute inset-0 p-4 pointer-events-none whitespace-pre-wrap break-words leading-relaxed tracking-wide text-gray-500"
-                    style={{ wordSpacing: '0.25em' }}
-                    aria-hidden="true"
-                  >
-                    {text}
-                  </div>
-
-                  {/* Colored overlay for typed text */}
+                  {/* Background sample text with red highlight for incorrect input */}
                   <div
                     className="absolute inset-0 p-4 pointer-events-none whitespace-pre-wrap break-words leading-relaxed tracking-wide"
                     style={{ wordSpacing: '0.25em' }}
                     aria-hidden="true"
                   >
-                    {typedText.split('').map((char, index) => (
+                    {text.split('').map((char, index) => (
                       <span
                         key={index}
                         className={
-                          char === text[index]
-                            ? "text-green-500/70"
-                            : "text-foreground opacity-50"
+                          index < typedText.length
+                            ? typedText[index] === char
+                              ? "text-green-500"
+                              : " text-red-500"
+                            : "text-gray-500"
                         }
                       >
                         {char}
@@ -308,6 +301,7 @@ export default function TypingTest() {
             )}
           </CardContent>
         </Card>
+
 
       </div>
     </div>
