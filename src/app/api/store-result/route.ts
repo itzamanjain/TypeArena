@@ -68,7 +68,7 @@ export async function PUT(request: NextRequest) {
         await user.save();
 
         return NextResponse.json(
-            { message: "Result stored successfully", user },
+            { message: "Result stored successfully" },
             { status: 200 }
         );
     } catch (error:any) {
