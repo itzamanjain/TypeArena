@@ -66,7 +66,7 @@ export default function LeaderboardPage() {
     <div className="container min-h-screen mx-auto px-4 py-8">
       <Card>
         <CardHeader>
-          <CardTitle className="text-3xl font-bold text-center">Leaderboard</CardTitle>
+          <CardTitle className="text-3xl font-bold">Leaderboard</CardTitle>
         </CardHeader>
         <CardContent>
           {!leaderboard ? (
@@ -85,18 +85,18 @@ export default function LeaderboardPage() {
                 {leaderboard.users.map((user, index) => (
                   <TableRow 
                     key={user._id} 
-                    className="cursor-pointer hover:bg-muted/50 transition-colors"
+                    className="cursor-pointer text-xl hover:bg-muted/50 transition-colors"
                     onClick={() => handleRowClick(user.username)}
                   >
                     <TableCell className="font-medium">
                       {index === 0 && <Badge className="mr-1">🥇</Badge>}
                       {index === 1 && <Badge className="mr-1">🥈</Badge>}
                       {index === 2 && <Badge className="mr-1">🥉</Badge>}
-                      {index + 1}
+                      {/* {index + 1} */}
                     </TableCell>
                     <TableCell>
-                      <Link href={`/${user.username}`} className="hover:underline">
-                        {user.fullname}
+                      <Link href={`/${user.username}`} className="underline hover:underline">
+                        {user.username}
                       </Link>
                     </TableCell>
                     <TableCell>{user.testAttempted}</TableCell>

@@ -8,6 +8,7 @@ import { AlertCircle, Clock, Trophy, Users } from 'lucide-react';
 import sampleParagraphs from '@/data/sampleParagraphs'
 import axios from "axios"
 import toast, { Toaster } from "react-hot-toast"
+import LeaderboardPage from "../leaderboard/page"
 
 const WORD_LIMIT = 100
 const TIME_LIMIT = 60
@@ -190,6 +191,7 @@ export default function TypingTest() {
           )}
         </CardContent>
       </Card>
+      <LeaderboardPage />
       <Toaster 
       position="bottom-right"
       reverseOrder={false}
