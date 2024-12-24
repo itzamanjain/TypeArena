@@ -5,7 +5,21 @@ export interface IUser extends mongoose.Document {
     email: string;
     password: string;
     username: string;
-    profile: mongoose.Schema.Types.ObjectId;
+    testAttempted: number;
+    topSpeed: number;
+    avgSpeed: number;
+    accuracy : number;
+    achievement: string[];
+    bio : string;
+    profilePicUrl:string;
+    country : string;
+    lastActive : Date;
+    history : {
+        speed : number,
+        accuracy : number,
+        testPlayed : Date,
+    }[];
+
 }
 
 const userSchema = new mongoose.Schema<IUser>({
@@ -31,7 +45,7 @@ const userSchema = new mongoose.Schema<IUser>({
         type: String,
         required: true,
         minlength: 5,
-        maxlength: 20,
+        maxlength: 2000,
 
     },
     username: {
@@ -43,11 +57,42 @@ const userSchema = new mongoose.Schema<IUser>({
         minlength: 3,
         maxlength: 20,
     },
-    // profile will contain histroy or something which have all matched played store
-    profile:{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Profile',
-    }
+    bio:{
+        type: String,
+        default : '',
+    },
+    testAttempted:{
+        type:Number,
+        default : 0,
+    },
+    topSpeed:{
+        type:Number,
+        default : 0,
+    },
+    avgSpeed:{
+        type:Number,
+        default : 0,
+    },
+    achievement:{
+        type: [String],
+    },
+    profilePicUrl : {
+        type: String,
+        default : '',
+    },
+    lastActive: {
+        type: Date,
+        default: Date.now,
+    },
+    history: {
+    type : [{
+        speed: { type: Number, },
+        accuracy: { type: Number,  },
+        testPlayed: { type: Date, default: Date.now },
+    }],
+    default : [],
+    },
+    
 });
 
 

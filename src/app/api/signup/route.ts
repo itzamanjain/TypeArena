@@ -5,18 +5,20 @@ import bcryptjs from "bcryptjs";
 import { rateLimit } from "@/lib/ratelimit";
 
 
-connectDb();
+
 
 export async function POST(request:NextRequest){
     try {
+        console.log("connection making-----------------------");
         
-        // 5 signup requests per day
-        if(!rateLimit(request)){
-            return NextResponse.json(
-                { message: "Rate limit exceeded" },
-                { status: 429 }
-            );
-        }
+        await connectDb();
+        // 5 signup requests per day 
+        // if(!rateLimit(request)){
+        //     return NextResponse.json(
+        //         { message: "Rate limit exceeded" },
+        //         { status: 429 }
+        //     );
+        // }
 
         const reqBody = await request.json();
         console.log("requsest received",reqBody);
@@ -38,7 +40,8 @@ export async function POST(request:NextRequest){
                 { status: 400 }
             );
         }
-
+        console.log("come till here");
+        
         const existingUser = await User.findOne({ email});
         if(existingUser){
             return NextResponse.json(
@@ -46,18 +49,14 @@ export async function POST(request:NextRequest){
                 { status: 400 }
             );
         }
-
+        console.log("hashing pass")
         const salt = await bcryptjs.genSalt(10);
         const hashedPassword = await bcryptjs.hash(password, salt);
+        console.log("cret user");
+        
+        const newUser = new User({ username, password: hashedPassword,email, fullname });
 
-        const newUser = new User({
-            fullname,
-            email,
-            password: hashedPassword,
-            username
-        });
-
-        const savedUser = await newUser.save();
+        const savedUser =  newUser.save();
 
         return NextResponse.json({
             message: "User created successfully",

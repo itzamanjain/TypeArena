@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Progress } from "@/components/ui/progress"
 import { AlertCircle, Clock, Trophy, Users } from 'lucide-react';
 import sampleParagraphs from '@/data/sampleParagraphs'
+import axios from "axios"
 
 const WORD_LIMIT = 100
 const TIME_LIMIT = 60
@@ -58,6 +59,22 @@ export default function TypingTest() {
       setResultsDisplayed(true)
     }
   }, [isTestRunning, timeLeft])
+
+  useEffect(() => {
+    // make a api call to store the result to db 
+    if(resultsDisplayed){
+      const storeresult = async () =>{
+        try {
+          const response = await axios.put('/api/store-result', { speed: wpm, accuracy:accuracy });
+          console.log('Result stored:', response.data);
+        } catch (error) {
+          console.log('error while storing the result')
+        }
+      }
+      storeresult();
+    }
+
+  },[resultsDisplayed])
 
   const handleTyping = (e: React.ChangeEvent<HTMLTextAreaElement>): void => {
     const typed = e.target.value
