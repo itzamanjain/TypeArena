@@ -10,6 +10,7 @@ import { Badge } from "@/components/ui/badge"
 import { Skeleton } from "@/components/ui/skeleton"
 import { AlertCircle } from 'lucide-react'
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
+import toast, { Toaster } from 'react-hot-toast'
 
 interface User {
   _id: string
@@ -33,9 +34,11 @@ export default function LeaderboardPage() {
     const fetchLeaderboard = async () => {
       try {
         const res = await axios.get('/api/leaderboard')
+        toast.success('Leaderboard fetched successfully')
         setLeaderboard(res.data)
       } catch (err) {
         console.error('Error fetching leaderboard:', err)
+        toast.error('Failed to load leaderboard.')
         setError('Failed to load leaderboard. Please try again later.')
       }
     }
@@ -105,6 +108,10 @@ export default function LeaderboardPage() {
           )}
         </CardContent>
       </Card>
+      <Toaster
+      position='bottom-right'
+      reverseOrder={false}
+      />
     </div>
   )
 }

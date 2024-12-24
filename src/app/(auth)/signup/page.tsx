@@ -6,6 +6,7 @@ import { Label } from "@/components/ui/label"
 import axios from 'axios'
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import toast, { Toaster } from 'react-hot-toast'
 
 export default function SignupPage() {
 
@@ -30,8 +31,11 @@ export default function SignupPage() {
     try {
       const response = await axios.post('/api/signup', user);
       console.log(response.data);
+      toast.success('Account created successfully');
       router.push('/login');
+
     } catch (error: any) {
+      toast.error(error.response.data?.message || 'Failed to create account');
       console.log("Error while signing up:", error);
     }
   }
@@ -73,6 +77,10 @@ export default function SignupPage() {
           </p>
         </div>
       </div>
+      <Toaster
+      position='bottom-right'
+      reverseOrder={false}
+      />                           
     </div>
   )
 }

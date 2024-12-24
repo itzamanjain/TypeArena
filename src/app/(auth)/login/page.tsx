@@ -7,12 +7,13 @@ import { Label } from "@/components/ui/label"
 import { useState } from 'react'
 import axios from 'axios'
 import { useRouter } from 'next/navigation'
-import useAuthStore from '@/store/useStore' // Import your auth store
+import useAuthStore from '@/store/useStore' 
+import toast, { Toaster } from 'react-hot-toast';
 
 export default function LoginPage() {
 
   const router = useRouter();
-  const { login } = useAuthStore(); // Access the login function from the store
+  const { login } = useAuthStore(); 
 
   const [user, setUser] = useState({
     email: '',
@@ -29,26 +30,18 @@ export default function LoginPage() {
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault(); // Prevent page reload on form submit
-    setLoading(true); // Set loading to true while processing the request
+    e.preventDefault(); 
+    setLoading(true); 
 
     try {
       const response = await axios.post('/api/login', user);
-      console.log("response:", response.data);
-      
-      // Assuming the response contains user data in the format { id, name, email }
-      const userData = response.data.user; // Extract the user data from the response
-
-      // Set user as authenticated in the store
-      login(userData); // Call the login function from your auth store
-
-      // Redirect to lobby page after successful login
-      router.push('/lobby');
-      
+      const userData = response.data.user; 
+      login(userData); 
+      toast.success('Logged in successfully');
+      router.push('/playground');
     } catch (error: any) {
+      toast.error(error.response.data?.message || 'Failed to login');
       console.error("Error during login:", error);
-      // Handle login error here (e.g., show an error message to the user)
-
     } finally {
       setLoading(false); // Set loading back to false after request completes
     }
@@ -120,6 +113,10 @@ export default function LoginPage() {
           </p>
         </div>
       </div>
+      <Toaster
+          position="bottom-right"
+          reverseOrder={false}
+        />
     </div>
   );
 }

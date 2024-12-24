@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Activity, Award, Clock, Target, Trophy, User, Loader2 } from 'lucide-react';
 import axios from "axios";
 import React from "react";
+import toast, { Toaster } from "react-hot-toast";
 
 type User = {
   _id: string;
@@ -27,8 +28,10 @@ type User = {
 async function getProfileData() {
   try {
     const response = await axios.get('/api/profile');
+    toast.success('Profile fetched successfully');
     return response.data.user || {}; // Fallback to an empty object if user data is missing
   } catch (error) {
+    toast.error('Failed to fetch profile data');
     console.error('Failed to fetch profile data:', error);
     return {}; // Return an empty object to avoid breaking the UI
   }
@@ -67,6 +70,10 @@ export default function ProfilePage() {
           <RecentActivity history={userData.history || []} />
         </div>
       </div>
+      <Toaster
+      position="bottom-right"
+      reverseOrder={false}
+      />
     </div>
   );
 }

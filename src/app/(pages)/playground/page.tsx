@@ -7,6 +7,7 @@ import { Progress } from "@/components/ui/progress"
 import { AlertCircle, Clock, Trophy, Users } from 'lucide-react';
 import sampleParagraphs from '@/data/sampleParagraphs'
 import axios from "axios"
+import toast, { Toaster } from "react-hot-toast"
 
 const WORD_LIMIT = 100
 const TIME_LIMIT = 60
@@ -67,7 +68,9 @@ export default function TypingTest() {
         try {
           const response = await axios.put('/api/store-result', { speed: wpm, accuracy:accuracy });
           console.log('Result stored:', response.data);
+          toast.success("Result stored successfully")
         } catch (error) {
+          toast.error("Failed to store result")
           console.log('error while storing the result')
         }
       }
@@ -187,6 +190,10 @@ export default function TypingTest() {
           )}
         </CardContent>
       </Card>
+      <Toaster 
+      position="bottom-right"
+      reverseOrder={false}
+      />
     </div>
   )
 }

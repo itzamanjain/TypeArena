@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Activity, Award, Clock, Target, Trophy, Loader2 } from 'lucide-react';
 import axios from "axios";
 import { useEffect, useState } from "react";
+import toast, { Toaster } from "react-hot-toast";
 
 type User = {
   _id: string;
@@ -27,9 +28,11 @@ type User = {
 async function getProfileData(username: string): Promise<User | null> {
   try {
     const response = await axios.get(`/api/player-profile?username=${username}`);
+    toast.success('Profile fetched successfully');
     return response.data.user;
   } catch (error) {
     console.error('Failed to fetch profile data:', error);
+    toast.error('failde to fetch profile')
     return null;
   }
 }
@@ -71,6 +74,7 @@ export default function ProfilePage({ params }: { params: { username: string } }
           <RecentActivity history={userData.history} />
         </div>
       </div>
+      <Toaster position="bottom-right" reverseOrder={false} />
     </div>
   );
 }
@@ -117,7 +121,7 @@ function UserStats({ user }: { user: User }) {
           </div>
           <div className="flex justify-between">
             <span className="flex items-center"><Activity className="mr-2" /> Average Speed</span>
-            <span className="font-semibold">{user.avgSpeed ? `${user.avgSpeed.toFixed(2)} WPM` : 'N/A'}</span>
+            <span className="font-semibold">{user.avgSpeed ? `${user.avgSpeed.toFixed(2).slice(0,2)} WPM` : 'N/A'}</span>
           </div>
         </div>
       </CardContent>
