@@ -2,9 +2,9 @@
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Activity, Award, Clock, Target, Trophy, User, Loader2 } from 'lucide-react';
+import { Activity, Award, Clock, Target, Trophy, Loader2 } from 'lucide-react';
 import axios from "axios";
-import React from "react";
+import { useEffect, useState } from "react";
 
 type User = {
   _id: string;
@@ -14,7 +14,7 @@ type User = {
   profilePicUrl: string;
   testAttempted: number;
   topSpeed: number;
-  avgSpeed: number;
+  avgSpeed: number | null;
   history: {
     _id: string;
     speed: number;
@@ -24,35 +24,39 @@ type User = {
   achievement: string[];
 }
 
-async function getProfileData() {
+async function getProfileData(username: string): Promise<User | null> {
   try {
-    const response = await axios.get('/api/profile');
-    return response.data.user || {}; // Fallback to an empty object if user data is missing
+    const response = await axios.get(`/api/player-profile?username=${username}`);
+    return response.data.user;
   } catch (error) {
     console.error('Failed to fetch profile data:', error);
-    return {}; // Return an empty object to avoid breaking the UI
+    return null;
   }
 }
 
-export default function ProfilePage() {
-  const [userData, setUserData] = React.useState<User>();
+export default function ProfilePage({ params }: { params: { username: string } }) {
+  const [userData, setUserData] = useState<User | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
-  React.useEffect(() => {
+  useEffect(() => {
     async function fetchData() {
-      const data = await getProfileData();
+      const data = await getProfileData(params.username);
       setUserData(data);
+      setIsLoading(false);
     }
     fetchData();
-  }, []);
+  }, [params.username]);
 
-  if (!userData) {
+  if (isLoading) {
     return (
       <div className="flex items-center justify-center h-screen">
-        <div className="animate-spin  text-teal-500">
-          <Loader2 />
-        </div>
+        <Loader2 className="animate-spin text-teal-500" />
       </div>
     );
+  }
+
+  if (!userData) {
+    return <div className="text-center mt-8">User not found</div>;
   }
 
   return (
@@ -61,10 +65,10 @@ export default function ProfilePage() {
         <div className="md:col-span-1 space-y-4">
           <UserInfo user={userData} />
           <UserStats user={userData} />
-          <Achievements achievements={userData.achievement || []} />
+          <Achievements achievements={userData.achievement} />
         </div>
         <div className="md:col-span-2">
-          <RecentActivity history={userData.history || []} />
+          <RecentActivity history={userData.history} />
         </div>
       </div>
     </div>
@@ -77,16 +81,15 @@ function UserInfo({ user }: { user: User }) {
       <CardContent className="pt-6">
         <div className="flex flex-col items-center">
           <Avatar className="w-24 h-24 mb-4">
-            <AvatarImage src={user?.profilePicUrl || ''} alt={user?.fullname || 'User'} />
-            <AvatarFallback>{user?.fullname?.charAt(0) || 'U'}</AvatarFallback>
+            <AvatarImage src={user.profilePicUrl} alt={user.fullname} />
+            <AvatarFallback>{user.fullname.charAt(0)}</AvatarFallback>
           </Avatar>
-          <h2 className="text-2xl font-bold">{user?.fullname || 'Unknown User'}</h2>
-          <p className="text-muted-foreground">@{user?.username || 'unknown'}</p>
-          <p className="mt-2 text-center">{user?.bio || "No bio available"}</p>
+          <h2 className="text-2xl font-bold">{user.fullname}</h2>
+          <p className="text-muted-foreground">@{user.username}</p>
+          <p className="mt-2 text-center">{user.bio || "No bio available"}</p>
           <p className="mt-2 text-center">
-            Last Online: {user?.history?.[user.history.length - 1]?.testPlayed ? new Date(user.history[user.history.length - 1].testPlayed).toLocaleString() : 'No data available'}
+            Last Online: {user.history.length > 0 ? new Date(user.history[user.history.length - 1].testPlayed).toLocaleString() : 'No data available'}
           </p>
-
         </div>
       </CardContent>
     </Card>
@@ -106,15 +109,15 @@ function UserStats({ user }: { user: User }) {
         <div className="space-y-2">
           <div className="flex justify-between">
             <span className="flex items-center"><Target className="mr-2" /> Tests Attempted</span>
-            <span className="font-semibold">{user?.testAttempted || 0}</span>
+            <span className="font-semibold">{user.testAttempted}</span>
           </div>
           <div className="flex justify-between">
             <span className="flex items-center"><Trophy className="mr-2" /> Top Speed</span>
-            <span className="font-semibold">{user?.topSpeed || 0} WPM</span>
+            <span className="font-semibold">{user.topSpeed} WPM</span>
           </div>
           <div className="flex justify-between">
             <span className="flex items-center"><Activity className="mr-2" /> Average Speed</span>
-            <span className="font-semibold">{((user?.avgSpeed) || 0).toFixed(2).slice(0, 2)} WPM</span>
+            <span className="font-semibold">{user.avgSpeed ? `${user.avgSpeed.toFixed(2)} WPM` : 'N/A'}</span>
           </div>
         </div>
       </CardContent>
@@ -137,7 +140,7 @@ function RecentActivity({ history }: { history: User['history'] }) {
             <div key={test._id} className="flex justify-between items-center">
               <div>
                 <p className="font-semibold">{test.speed} WPM</p>
-                <p className="text-sm text-muted-foreground">Accuracy: {test.accuracy ? test.accuracy.toFixed(2) : "N/A%"}%</p>
+                <p className="text-sm text-muted-foreground">Accuracy: {test.accuracy.toFixed(2)}%</p>
               </div>
               <p className="text-sm text-muted-foreground">
                 {new Date(test.testPlayed).toLocaleDateString()}
@@ -176,3 +179,4 @@ function Achievements({ achievements }: { achievements: string[] }) {
     </Card>
   );
 }
+

@@ -6,18 +6,13 @@ import { NextRequest, NextResponse } from "next/server";
 connectDb();
 // send the user data except password
 
+// url : /api/player-profile?username=itzaman
 
 export async function GET(request:NextRequest){
     try {
-        const reqUserId = getDataFromToken(request);
-        if (!reqUserId) {
-            return NextResponse.json(
-                { message: "User not logged in" },
-                { status: 401 }
-            );
-        }
-
-        const user = await User.findById(reqUserId).select("-password");
+        const { searchParams } = new URL(request.url);
+        const username = searchParams.get("username");
+        const user = await User.findOne({username}).select("-password");
         if (!user) {
             return NextResponse.json(
                 { message: "User not found" },
@@ -25,12 +20,9 @@ export async function GET(request:NextRequest){
             );
         }
         return NextResponse.json({message:"user found",user},{status:200})
-
     } catch (error:any) {
         return NextResponse.json({message:"failed to load user"},{status:500})
     }
 }
 
-
-
-// user profile by its username 
+        
