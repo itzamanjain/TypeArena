@@ -18,6 +18,7 @@ export default function SignupPage() {
     email: '',
     password: ''
   })
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setUser({
@@ -29,6 +30,7 @@ export default function SignupPage() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault(); // Prevent form from refreshing the page
     try {
+      setLoading(true);
       const response = await axios.post('/api/signup', user);
       console.log(response.data);
       toast.success('Account created successfully');
@@ -37,6 +39,8 @@ export default function SignupPage() {
     } catch (error: any) {
       toast.error(error.response.data?.message || 'Failed to create account');
       console.log("Error while signing up:", error);
+    }finally{
+      setLoading(false);
     }
   }
 
@@ -66,7 +70,9 @@ export default function SignupPage() {
               <Input onChange={handleChange} id="password" name="password" type="password" required className="mt-1" />
             </div>
           </div>
-          <Button type="submit" className="w-full text-white hover:bg-teal-600 bg-teal-500">Sign up</Button>
+          <Button type="submit" className="w-full text-white hover:bg-teal-600 bg-teal-500">
+            {loading ?  "Signing Up" : "Sign up"}
+            </Button>
         </form>
         <div className="text-center mt-4">
           <p className="text-sm text-gray-600">
