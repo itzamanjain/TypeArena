@@ -20,6 +20,9 @@ const NavItems = () => (
     <Link href='/profile' className="text-gray-600 dark:text-white hover:text-gray-900 transition-colors">
       Profile
     </Link>
+    <Link href='/leaderboard' className="text-gray-600 dark:text-white hover:text-gray-900 transition-colors">
+      leaderboard
+    </Link>
     
   </>
 )
