@@ -8,7 +8,6 @@ import { ArrowRight, Menu } from 'lucide-react'
 import useAuthStore from '@/store/useStore'
 import { useRouter } from 'next/navigation'
 import axios from 'axios'
-import { NextRequest } from 'next/server'
 
 const NavItems = () => (
   <>
@@ -28,7 +27,7 @@ const NavItems = () => (
   </>
 )
 
-export function Navbar(request:NextRequest) {
+export function Navbar() {
   const router = useRouter();
   const { isAuthenticated, logout,user } = useAuthStore()
   const [isOpen, setIsOpen] = useState(false)

@@ -6,6 +6,7 @@ import { Activity, Award, Clock, Target, Trophy, User, Loader2 } from 'lucide-re
 import axios from "axios";
 import React from "react";
 import toast, { Toaster } from "react-hot-toast";
+import { Button } from "@/components/ui/button";
 
 type User = {
   _id: string;
@@ -93,7 +94,6 @@ function UserInfo({ user }: { user: User }) {
           <p className="mt-2 text-center">
             Last Online: {user?.history?.[user.history.length - 1]?.testPlayed ? new Date(user.history[user.history.length - 1].testPlayed).toLocaleString() : 'No data available'}
           </p>
-
         </div>
       </CardContent>
     </Card>
