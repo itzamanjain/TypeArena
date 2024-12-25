@@ -8,7 +8,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Skeleton } from "@/components/ui/skeleton"
-import { AlertCircle } from 'lucide-react'
+import { AlertCircle, Users } from 'lucide-react'
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import toast, { Toaster } from 'react-hot-toast'
 
@@ -65,8 +65,9 @@ export default function LeaderboardPage() {
   return (
     <div className="container min-h-screen mx-auto px-4 py-8">
       <Card>
-        <CardHeader>
-          <CardTitle className="text-3xl font-bold">Leaderboard</CardTitle>
+        <CardHeader className='flex flex-row items-center space-x-2'>
+          <Users className="w-7 h-7" />
+          <CardTitle className="text-3xl font-bold"> Leaderboard</CardTitle>
         </CardHeader>
         <CardContent>
           {!leaderboard ? (
@@ -89,10 +90,10 @@ export default function LeaderboardPage() {
                     onClick={() => handleRowClick(user.username)}
                   >
                     <TableCell className="font-medium">
-                      {index === 0 && <Badge className="mr-1">🥇</Badge>}
-                      {index === 1 && <Badge className="mr-1">🥈</Badge>}
-                      {index === 2 && <Badge className="mr-1">🥉</Badge>}
-                      {/* {index + 1} */}
+                      {index === 0 && <p className="mr-1">🥇</p>}
+                      {index === 1 && <p className="mr-1">🥈</p>}
+                      {index === 2 && <p className="mr-1">🥉</p>}
+                      {index > 2 && index + 1}
                     </TableCell>
                     <TableCell>
                       <Link href={`/${user.username}`} className="underline hover:underline">

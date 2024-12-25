@@ -70,14 +70,14 @@ export default function SignupPage() {
               <Input onChange={handleChange} id="password" name="password" type="password" required className="mt-1" />
             </div>
           </div>
-          <Button type="submit" className="w-full text-white hover:bg-teal-600 bg-teal-500">
+          <Button type="submit" className="w-full text-white hover:bg-yellow-600 bg-yellow-500">
             {loading ?  "Signing Up" : "Sign up"}
             </Button>
         </form>
         <div className="text-center mt-4">
           <p className="text-sm text-gray-600">
             Already have an account?{' '}
-            <Link href="/login" className="font-medium text-teal-600 hover:text-teal-500">
+            <Link href="/login" className="font-medium text-yellow-600 hover:text-yellow-500">
               Log in
             </Link>
           </p>

@@ -64,10 +64,10 @@ export default function TypingTest() {
 
   useEffect(() => {
     // make a api call to store the result to db 
-    if(resultsDisplayed){
-      const storeresult = async () =>{
+    if (resultsDisplayed) {
+      const storeresult = async () => {
         try {
-          const response = await axios.put('/api/store-result', { speed: wpm, accuracy:accuracy });
+          const response = await axios.put('/api/store-result', { speed: wpm, accuracy: accuracy });
           console.log('Result stored:', response.data);
           toast.success("Result stored successfully")
         } catch (error) {
@@ -78,7 +78,7 @@ export default function TypingTest() {
       storeresult();
     }
 
-  },[resultsDisplayed])
+  }, [resultsDisplayed])
 
   const handleTyping = (e: React.ChangeEvent<HTMLTextAreaElement>): void => {
     const typed = e.target.value
@@ -103,10 +103,10 @@ export default function TypingTest() {
   }
 
   return (
-    <div className="container min-h-screen mt-14 mx-auto p-4">
+    <div className="container min-h-screen mx-auto px-6 py-8">
       <Card>
         <CardHeader>
-          <CardTitle className="text-2xl font-bold">Typing Test</CardTitle>
+          <CardTitle className="text-3xl font-bold">Typing Test</CardTitle>
         </CardHeader>
         <CardContent>
           {showCountdown && (
@@ -124,17 +124,23 @@ export default function TypingTest() {
                 </div>
                 <div className="flex items-center space-x-3">
                   <AlertCircle className="w-6 h-6" />
-                  <span>{accuracy.toFixed(2)}%</span>
+                  Your Accuracy: <span className="font-bold">{accuracy.toFixed(2)}%</span>
                 </div>
                 <div className="flex items-center space-x-3">
                   <Trophy className="w-6 h-6" />
                   <span>{wpm} WPM</span>
                 </div>
               </div>
-              <Progress
+              {/* <Progress
                 value={(typedText.length / text.length) * 100}
-                className="w-full h-4 rounded-full"
-              />
+                className="w-full  h-4 rounded-full"
+              /> */}
+              <Button
+                className="text-xl bg-gray-800 text-white hover:bg-gray-900 font-medium rounded-md p-4 animate-bounce-short"
+              >
+                Click below  to start typing 👇
+              </Button>
+
               <div className="relative  min-h-[200px] w-full rounded-lg border bg-background p-4 font-mono text-2xl">
                 <div
                   className="absolute inset-0 p-4  pointer-events-none whitespace-pre-wrap break-words leading-relaxed tracking-wide"
@@ -179,22 +185,28 @@ export default function TypingTest() {
               <p className="text-xl">
                 Your Accuracy: <span className="font-bold">{accuracy.toFixed(2)}%</span>
               </p>
+              <Button
+                onClick={startTest}
+                className="text-white text-lg py-3 bg-gray-500 hover:bg-gray-600"
+              >
+                Try Again
+              </Button>
             </div>
           )}
           {!isTestRunning && !showCountdown && !resultsDisplayed && (
             <Button
               onClick={startTest}
-              className="w-full text-white text-lg py-3 bg-teal-500 hover:bg-teal-600"
+              className=" text-white text-lg py-3 bg-gray-700 hover:bg-gray-900"
             >
-              Start Typing Test
+              Start Test
             </Button>
           )}
         </CardContent>
       </Card>
       <LeaderboardPage />
-      <Toaster 
-      position="bottom-right"
-      reverseOrder={false}
+      <Toaster
+        position="bottom-right"
+        reverseOrder={false}
       />
     </div>
   )

@@ -79,8 +79,8 @@ export default function StatusPage() {
                 <p className="text-red-500">{error}</p>
               ) : (
                 <div className="flex items-center space-x-2">
-                  <div className="w-4 h-4 rounded-full bg-teal-500"></div>
-                  <p className="text-teal-700 font-medium">
+                  <div className="w-4 h-4 rounded-full bg-yellow-500"></div>
+                  <p className="text-yellow-700 font-medium">
                     {statusHistory[statusHistory.length - 1]?.status || 'Unknown'}
                   </p>
                 </div>
@@ -103,7 +103,7 @@ export default function StatusPage() {
               </div>
               <div className="h-8 bg-gray-200 rounded-full overflow-hidden">
                 <div 
-                  className="h-full bg-teal-500 transition-all duration-500 ease-in-out" 
+                  className="h-full bg-yellow-500 transition-all duration-500 ease-in-out" 
                   style={{width: `${calculateUptime()}%`}}
                   title={`${calculateUptime().toFixed(2)}% uptime`}
                 ></div>

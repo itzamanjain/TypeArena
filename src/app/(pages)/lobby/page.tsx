@@ -167,7 +167,7 @@ export default function TypingTest() {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                <Button onClick={createRoom} className="w-full text-white hover:bg-teal-600 bg-teal-500">Create Room</Button>
+                <Button onClick={createRoom} className=" text-white text-xl hover:bg-gray-900 bg-gray-700">Create Room</Button>
                 {roomId && (
                   <div className="p-2 bg-muted rounded-md">
                     <p className="text-sm">Share this room ID with others:</p>
@@ -175,12 +175,12 @@ export default function TypingTest() {
                   </div>
                 )}
                 <div className="flex space-x-2">
-                  <Input
+                  {!roomId && <Input
                     type="text"
                     placeholder="Enter Room ID"
                     onChange={(e) => setRoomId(e.target.value)}
-                  />
-                  <Button variant="outline" onClick={() => joinRoom(roomId)}>{isJoining ? "Joining" : "Join"}</Button>
+                  />}
+                  <Button className='text-xl' variant="outline" onClick={() => joinRoom(roomId)}>{isJoining ? "Joining" : "Join"}</Button>
                 </div>
               </div>
             </CardContent>
@@ -283,7 +283,7 @@ export default function TypingTest() {
             {!isTestRunning && Object.keys(players).length > 0 && !resultsDisplayed && isAdmin && (
               <Button
                 onClick={startTest}
-                className="w-full text-white text-lg py-3 bg-teal-500 hover:bg-teal-600"
+                className=" text-white text-lg py-3 bg-gray-700 hover:bg-gray-900"
               >
                 Start Typing Test
               </Button>

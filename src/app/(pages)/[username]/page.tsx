@@ -53,7 +53,7 @@ export default function ProfilePage({ params }: { params: { username: string } }
   if (isLoading) {
     return (
       <div className="flex items-center justify-center h-screen">
-        <Loader2 className="animate-spin text-teal-500" />
+        <Loader2 className="animate-spin text-yellow-500" />
       </div>
     );
   }
