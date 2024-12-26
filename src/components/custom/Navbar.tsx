@@ -11,16 +11,16 @@ import axios from 'axios'
 
 const NavItems = () => (
   <>
-    <Link href="/playground" className="text-gray-600 dark:text-white hover:text-gray-900 transition-colors">
+    <Link href="/playground" className="text-gray-600 dark:text-black hover:text-gray-900 transition-colors">
       Play Now
     </Link>
-    <Link href="/lobby" className="text-gray-600 dark:text-white hover:text-gray-900 transition-colors">
+    <Link href="/lobby" className="text-gray-600 dark:text-black hover:text-gray-900 transition-colors">
       Play with friends
     </Link>
-    <Link href='/profile' className="text-gray-600 dark:text-white hover:text-gray-900 transition-colors">
+    <Link href='/profile' className="text-gray-600 dark:text-black hover:text-gray-900 transition-colors">
       Profile
     </Link>
-    <Link href='/leaderboard' className="text-gray-600 dark:text-white hover:text-gray-900 transition-colors">
+    <Link href='/leaderboard' className="text-gray-600 dark:text-black hover:text-gray-900 transition-colors">
       leaderboard
     </Link>
     
