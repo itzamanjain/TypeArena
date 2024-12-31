@@ -46,7 +46,7 @@ export function Navbar() {
     <header className=" mx-auto p-6 border-b  w-full ">
       <nav className="flex justify-between items-center">
         <h1 className="text-2xl dark:text-black font-bold text-gray-900">
-        <Link href="/" className="text-2xl font-semibold text-black">
+        <Link href="/" className="text-2xl font-semibold text-yellow-500">
             TypeArena
           </Link>
         </h1>
