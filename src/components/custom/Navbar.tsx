@@ -11,20 +11,27 @@ import axios from 'axios'
 
 const NavItems = () => (
   <>
-    <Link href="/playground" className="text-gray-600 dark:text-white hover:text-gray-900 transition-colors">
+    <Link href="/playground" className="text-gray-600 dark:text-black hover:text-gray-900 transition-colors">
       Play Now
     </Link>
-    <Link href="/lobby" className="text-gray-600 dark:text-white hover:text-gray-900 transition-colors">
+    <Link href="/lobby" className="text-gray-600 dark:text-black hover:text-gray-900 transition-colors">
       Play with friends
     </Link>
+    <Link href='/profile' className="text-gray-600 dark:text-black hover:text-gray-900 transition-colors">
+      Profile
+    </Link>
+    <Link href='/leaderboard' className="text-gray-600 dark:text-black hover:text-gray-900 transition-colors">
+      leaderboard
+    </Link>
+    
   </>
 )
 
 export function Navbar() {
   const router = useRouter();
-  const { isAuthenticated, logout } = useAuthStore()
+  const { isAuthenticated, logout,user } = useAuthStore()
   const [isOpen, setIsOpen] = useState(false)
-
+  
   const handleLogout = async () => {
     // api call for logout 
     const response = await axios.get('/api/logout')
@@ -36,10 +43,10 @@ export function Navbar() {
   }
 
   return (
-    <header className="container mx-auto px-4 py-6 border-b ">
+    <header className=" mx-auto p-6 border-b  w-full ">
       <nav className="flex justify-between items-center">
-        <h1 className="text-2xl dark:text-white font-bold text-gray-900">
-        <Link href="/" className="text-2xl font-semibold text-teal-500">
+        <h1 className="text-2xl dark:text-black font-bold text-gray-900">
+        <Link href="/" className="text-2xl font-semibold text-black">
             TypeArena
           </Link>
         </h1>
@@ -47,11 +54,11 @@ export function Navbar() {
           <NavItems />
           {/* Conditional Rendering for Auth Button */}
           {isAuthenticated ? (
-            <Button className=' bg-teal-500 text-white' onClick={handleLogout}>Logout</Button>
+            <Button className=' bg-yellow-500 text-white' onClick={handleLogout}>Logout</Button>
           ) : (
             <Link
             href="/signup"
-            className="text-sm bg-teal-500 text-white px-4 py-2 rounded-full hover:bg-teal-600 transition-colors flex items-center"
+            className="text-sm bg-yellow-500 text-white px-4 py-2 rounded-full hover:bg-yellow-600 transition-colors flex items-center"
           >
             Join Now
             <ArrowRight className="ml-1 h-4 w-4" />
@@ -68,8 +75,8 @@ export function Navbar() {
             <nav className="flex flex-col space-y-4 mt-8">
               <NavItems />
               {/* Conditional Rendering for Auth Button */}
-              {isAuthenticated ? (
-                <Button className='bg-teal-500 text-white' onClick={handleLogout}>Logout</Button>
+              {user?.token ? (
+                <Button className='bg-yellow-500 text-white' onClick={handleLogout}>Logout</Button>
               ) : (
                 <Link href="/signup">Join Now</Link>
               )}

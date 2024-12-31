@@ -20,6 +20,19 @@
 - **Leaderboard**: Compare your scores with players worldwide.
 - **Custom Game Rooms**: Create personalized game rooms with custom settings such as word length, game duration, and more.
 - **Mobile & Desktop Friendly**: Fully responsive design for both desktop and mobile users.
+- **Authentication**: Authentication system to signup, login, logout and reset password(to be done)
+
+## to be added
+
+- **Profile**: Profile page to show all the matches played and stats
+- **Leaderboard**: Leaderboard page to show the top players and their stats
+- **Settings**: Settings page to change the game settings
+- **Achievements**: Achievements page to show the achievements and rewards to engaze user
+- **Shop**: Shop page to buy the premium features 🤔
+- **Friends**: Friends page to add friends and chat with them
+- **Chat**: Chat page to chat with other players
+- **Notifications**: Notifications page to show the notifications
+-
 
 ## Getting Started
 

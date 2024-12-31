@@ -7,12 +7,13 @@ import { Label } from "@/components/ui/label"
 import { useState } from 'react'
 import axios from 'axios'
 import { useRouter } from 'next/navigation'
-import useAuthStore from '@/store/useStore' // Import your auth store
+import useAuthStore from '@/store/useStore' 
+import toast, { Toaster } from 'react-hot-toast';
 
 export default function LoginPage() {
 
   const router = useRouter();
-  const { login } = useAuthStore(); // Access the login function from the store
+  const { login } = useAuthStore(); 
 
   const [user, setUser] = useState({
     email: '',
@@ -29,26 +30,18 @@ export default function LoginPage() {
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault(); // Prevent page reload on form submit
-    setLoading(true); // Set loading to true while processing the request
+    e.preventDefault(); 
+    setLoading(true); 
 
     try {
       const response = await axios.post('/api/login', user);
-      console.log("response:", response.data);
-      
-      // Assuming the response contains user data in the format { id, name, email }
-      const userData = response.data.user; // Extract the user data from the response
-
-      // Set user as authenticated in the store
-      login(userData); // Call the login function from your auth store
-
-      // Redirect to lobby page after successful login
-      router.push('/lobby');
-      
+      const userData = response.data.user; 
+      login(userData); 
+      toast.success('Logged in successfully');
+      router.push('/playground');
     } catch (error: any) {
+      toast.error(error.response.data?.message || 'Failed to login');
       console.error("Error during login:", error);
-      // Handle login error here (e.g., show an error message to the user)
-
     } finally {
       setLoading(false); // Set loading back to false after request completes
     }
@@ -95,31 +88,35 @@ export default function LoginPage() {
                 id="remember-me" 
                 name="remember-me" 
                 type="checkbox" 
-                className="h-4 w-4 text-teal-600 focus:ring-teal-500 border-gray-300 rounded" 
+                className="h-4 w-4 text-yellow-600 focus:ring-yellow-500 border-gray-300 rounded" 
               />
               <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-900">
                 Remember me
               </label>
             </div>
             <div className="text-sm">
-              <Link href="/forgot-password" className="font-medium text-teal-600 hover:text-teal-500">
+              <Link href="/forgot-password" className="font-medium text-yellow-600 hover:text-yellow-500">
                 Forgot your password?
               </Link>
             </div>
           </div>
-          <Button type="submit" className="w-full text-white hover:bg-teal-600 bg-teal-500" disabled={loading}>
+          <Button type="submit" className="w-full text-white hover:bg-yellow-600 bg-yellow-500" disabled={loading}>
             {loading ? 'Logging in...' : 'Log in'}
           </Button>
         </form>
         <div className="text-center mt-4">
           <p className="text-sm text-gray-600">
             Don't have an account?{' '}
-            <Link href="/signup" className="font-medium text-teal-600 hover:text-teal-500">
+            <Link href="/signup" className="font-medium text-yellow-600 hover:text-yellow-500">
               Sign up
             </Link>
           </p>
         </div>
       </div>
+      <Toaster
+          position="bottom-right"
+          reverseOrder={false}
+        />
     </div>
   );
 }
