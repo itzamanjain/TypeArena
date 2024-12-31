@@ -76,3 +76,19 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
+::-webkit-scrollbar {
+  @apply w-2 h-2;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-secondary rounded-lg;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-muted-foreground/40 rounded-lg border-2 border-secondary transition-colors duration-200;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-muted-foreground/60;
+}
