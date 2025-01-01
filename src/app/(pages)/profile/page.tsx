@@ -7,6 +7,7 @@ import axios from "axios";
 import React from "react";
 import toast, { Toaster } from "react-hot-toast";
 import { Button } from "@/components/ui/button";
+import { useRouter } from 'next/navigation';
 
 type User = {
   _id: string;
@@ -27,24 +28,30 @@ type User = {
 }
 
 async function getProfileData() {
+  
   try {
     const response = await axios.get('/api/profile');
     toast.success('Profile fetched successfully');
-    return response.data.user || {}; // Fallback to an empty object if user data is missing
+    return response.data.user || {}; 
   } catch (error) {
-    toast.error('Failed to fetch profile data');
+    toast.error('login to view profile');
     console.error('Failed to fetch profile data:', error);
-    return {}; // Return an empty object to avoid breaking the UI
+    return {}; 
   }
 }
 
 export default function ProfilePage() {
+  const router = useRouter();
   const [userData, setUserData] = React.useState<User>();
 
   React.useEffect(() => {
     async function fetchData() {
       const data = await getProfileData();
+      if(!data._id) {
+        router.push('/login');
+      }
       setUserData(data);
+      
     }
     fetchData();
   }, []);
