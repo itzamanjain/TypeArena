@@ -76,7 +76,7 @@ export default function TypeArenaLanding() {
               <CardTitle>Real-Time Typing</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-gray-600">Experience the thrill of live typing competitions with players worldwide.</p>
+              <p className="text-gray-600 dark:text-gray-300">Experience the thrill of live typing competitions with players worldwide.</p>
             </CardContent>
           </Card>
           <Card>
@@ -85,7 +85,7 @@ export default function TypeArenaLanding() {
               <CardTitle>Time Challenges</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-gray-600">Test your speed and accuracy against the clock in various timed modes.</p>
+              <p className="text-gray-600 dark:text-gray-300">Test your speed and accuracy against the clock in various timed modes.</p>
             </CardContent>
           </Card>
           <Card>
@@ -94,7 +94,7 @@ export default function TypeArenaLanding() {
               <CardTitle>Leaderboards</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-gray-600">Climb the ranks and showcase your typing prowess on global leaderboards.</p>
+              <p className="text-gray-600 dark:text-gray-300">Climb the ranks and showcase your typing prowess on global leaderboards.</p>
             </CardContent>
           </Card>
           <Card>
@@ -103,7 +103,7 @@ export default function TypeArenaLanding() {
               <CardTitle>Multiplayer Rooms</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-gray-600">Create or join typing rooms to compete directly with friends and rivals.</p>
+              <p className="text-gray-600 dark:text-gray-300">Create or join typing rooms to compete directly with friends and rivals.</p>
             </CardContent>
           </Card>
         </section>
@@ -115,28 +115,28 @@ export default function TypeArenaLanding() {
               <BarChart className="w-6 h-6 text-gray-600 mr-4 flex-shrink-0" />
               <div>
                 <h4 className="text-xl font-semibold mb-2">Detailed Analytics</h4>
-                <p className="text-gray-600">Track your progress with in-depth statistics and performance graphs.</p>
+                <p className="text-gray-600 dark:text-gray-300">Track your progress with in-depth statistics and performance graphs.</p>
               </div>
             </div>
             <div className="flex items-start">
               <Target className="w-6 h-6 text-gray-600 mr-4 flex-shrink-0" />
               <div>
                 <h4 className="text-xl font-semibold mb-2">Personalized Goals</h4>
-                <p className="text-gray-600">Set and achieve custom typing goals tailored to your skill level.</p>
+                <p className="text-gray-600 dark:text-gray-300">Set and achieve custom typing goals tailored to your skill level.</p>
               </div>
             </div>
             <div className="flex items-start">
               <Zap className="w-6 h-6 text-gray-600 mr-4 flex-shrink-0" />
               <div>
                 <h4 className="text-xl font-semibold mb-2">Daily Challenges</h4>
-                <p className="text-gray-600">Take on new typing challenges every day to keep your skills sharp.</p>
+                <p className="text-gray-600 dark:text-gray-300">Take on new typing challenges every day to keep your skills sharp.</p>
               </div>
             </div>
             <div className="flex items-start">
               <Coffee className="w-6 h-6 text-gray-600 mr-4 flex-shrink-0" />
               <div>
                 <h4 className="text-xl font-semibold mb-2">Typing Breaks</h4>
-                <p className="text-gray-600">Learn proper typing posture and take regular breaks to prevent fatigue.</p>
+                <p className="text-gray-600  dark:text-gray-300">Learn proper typing posture and take regular breaks to prevent fatigue.</p>
               </div>
             </div>
           </div>
@@ -147,7 +147,7 @@ export default function TypeArenaLanding() {
           <div className="flex flex-wrap justify-center gap-4 ">
            <AnimatedTooltipPreview />
           </div>
-          <p className="text-gray-600 dark:text-gray-400 text-xl mb-8">
+          <p className="text-gray-600 dark:text-gray-300 text-xl mb-8">
             &quot;TypeArena has transformed my typing speed and accuracy. I&apos;ve never had so much fun improving my skills!&quot;
           </p>
           <Button variant="outline" size="lg" className="border-gray-300 text-gray-600 dark:text-white hover:bg-gray-50 dark:hover:bg-gray-800">
@@ -157,7 +157,7 @@ export default function TypeArenaLanding() {
 
         <section className=" rounded-lg p-8 text-center">
           <h3 className="text-3xl font-bold text-gray-900 dark:text-gray-300 mb-6">Ready to Become a Typing Master?</h3>
-          <p className="text-xl text-gray-600 mb-8">Join our community of fast and accurate typists today. It&apos;s free to start!</p>
+          <p className="text-xl text-gray-600 dark:text-gray-300 mb-8">Join our community of fast and accurate typists today. It&apos;s free to start!</p>
           <div className="flex justify-center gap-4">
             <Button size="lg" className="bg-gray-900 text-white hover:bg-gray-800">
               <Link href='/signup'>Sign Up Now</Link>
