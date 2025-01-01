@@ -48,8 +48,8 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="w-full max-w-md space-y-8 p-10 bg-white rounded-xl shadow-md">
+    <div className="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-background">
+      <div className="w-full max-w-md space-y-8 p-10 bg-white dark:bg-black rounded-xl shadow-md">
         <div className="text-center">
           <h1 className="text-2xl font-bold">Welcome back</h1>
           <p className="text-gray-600 mt-2">Log in to your account</p>
@@ -90,7 +90,7 @@ export default function LoginPage() {
                 type="checkbox" 
                 className="h-4 w-4 text-yellow-600 focus:ring-yellow-500 border-gray-300 rounded" 
               />
-              <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-900">
+              <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-900 dark:text-gray-300">
                 Remember me
               </label>
             </div>
@@ -105,7 +105,7 @@ export default function LoginPage() {
           </Button>
         </form>
         <div className="text-center mt-4">
-          <p className="text-sm text-gray-600">
+          <p className="text-sm text-gray-600 dark:text-gray-300">
             Don't have an account?{' '}
             <Link href="/signup" className="font-medium text-yellow-600 hover:text-yellow-500">
               Sign up

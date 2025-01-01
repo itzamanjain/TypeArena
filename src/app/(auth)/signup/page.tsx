@@ -45,8 +45,8 @@ export default function SignupPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-white">
-      <div className="w-full max-w-md space-y-8  p-10 bg-gray-50 rounded-xl shadow-md">
+    <div className="min-h-screen flex items-center justify-center bg-white dark:bg-background">
+      <div className="w-full max-w-md space-y-8  p-10 bg-gray-50 dark:bg-black rounded-xl shadow-md">
         <div className="text-center">
           <h1 className="text-2xl font-bold">Create an account</h1>
           <p className="text-gray-600 mt-2">Sign up to get started</p>

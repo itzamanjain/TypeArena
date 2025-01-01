@@ -194,15 +194,15 @@ export default function TypingTest() {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="flex flex-col gap-2 overflow-y-auto max-h-[200px]">
+              <div className="flex flex-col gap-2   overflow-y-auto max-h-[200px]">
                 {Object.keys(players).length > 0 && (
-                  <div className='flex justify-between text-sm font-semibold mb-2'>
+                  <div className='flex justify-between text-sm  font-semibold mb-2'>
                     <span className='ml-3'>Player ID</span>
                     <span className='mr-4'>Speed (WPM)</span>
                   </div>
                 )}
                 {Object.entries(players).map(([playerId, player]) => (
-                  <div key={playerId} className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                  <div key={playerId} className="flex justify-between items-center p-3 bg-gray-50 dark:bg-black rounded-lg">
                     <span className="font-medium text-sm">{playerId.slice(0, 6).toLowerCase()}</span>
                     <span className="text-sm">{player.wpm}</span>
                   </div>

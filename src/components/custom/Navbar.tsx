@@ -8,21 +8,23 @@ import { ArrowRight, Menu } from 'lucide-react'
 import useAuthStore from '@/store/useStore'
 import { useRouter } from 'next/navigation'
 import axios from 'axios'
+import { ModeToggle } from './ModeToggle'
 
 const NavItems = () => (
   <>
-    <Link href="/playground" className="text-gray-600 dark:text-black hover:text-gray-900 transition-colors">
+    <Link href="/playground" className="text-gray-600 dark:text-gray-200 hover:text-gray-900 transition-colors">
       Play Now
     </Link>
-    <Link href="/lobby" className="text-gray-600 dark:text-black hover:text-gray-900 transition-colors">
+    <Link href="/lobby" className="text-gray-600 dark:text-gray-200 hover:text-gray-900 transition-colors">
       Play with friends
     </Link>
-    <Link href='/profile' className="text-gray-600 dark:text-black hover:text-gray-900 transition-colors">
+    <Link href='/profile' className="text-gray-600 dark:text-gray-200 hover:text-gray-900 transition-colors">
       Profile
     </Link>
-    <Link href='/leaderboard' className="text-gray-600 dark:text-black hover:text-gray-900 transition-colors">
+    <Link href='/leaderboard' className="text-gray-600 dark:text-gray-200 hover:text-gray-900 transition-colors">
       leaderboard
     </Link>
+    <ModeToggle />
     
   </>
 )
@@ -43,10 +45,10 @@ export function Navbar() {
   }
 
   return (
-    <header className=" mx-auto p-6 border-b  w-full ">
+    <header className="mx-auto dark:bg-background p-6 border-b  w-full ">
       <nav className="flex justify-between items-center">
         <h1 className="text-2xl dark:text-black font-bold text-gray-900">
-        <Link href="/" className="text-2xl font-semibold text-black">
+        <Link href="/" className="text-2xl font-semibold text-yellow-500">
             TypeArena
           </Link>
         </h1>

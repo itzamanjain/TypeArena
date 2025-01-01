@@ -3,7 +3,7 @@ import { Github } from 'lucide-react'
 
 export function Footer() {
   return (
-    <footer className="bg-background border-t text-foreground py-8 transition-colors duration-300">
+    <footer className="bg-background border-t  text-foreground py-8 transition-colors duration-300">
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div>

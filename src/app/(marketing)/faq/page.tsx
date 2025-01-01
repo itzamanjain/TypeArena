@@ -8,10 +8,10 @@ import {
 
 export default function FAQPage() {
   return (
-    <div className="min-h-screen bg-white flex flex-col">
+    <div className="min-h-screen bg-white dark:bg-black flex flex-col">
       
       <main className="flex-grow container mx-auto px-4 py-12">
-        <h1 className="text-4xl font-bold text-gray-900 mb-6">Frequently Asked Questions</h1>
+        <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-6">Frequently Asked Questions</h1>
         <Accordion type="single" collapsible className="w-full">
           <AccordionItem value="item-1">
             <AccordionTrigger>How do I start a typing test?</AccordionTrigger>
