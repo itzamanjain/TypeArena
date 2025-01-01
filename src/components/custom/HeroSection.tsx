@@ -1,14 +1,35 @@
+'use client'
+
 import Link from 'next/link'
 import { Keyboard, Timer, Trophy, Users, BarChart, Target, Zap, Coffee, ArrowRight } from 'lucide-react'
 import { Button } from '../ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { AnimatedTooltipPreview } from './AnimatedTooltip'
+import { motion } from 'framer-motion'
+
+const fadeInUp = {
+  initial: { opacity: 0, y: 50 },
+  animate: { opacity: 1, y: 0 },
+  transition: { duration: 0.8, ease: "easeOut" }
+}
+
+const stagger = {
+  animate: {
+    transition: {
+      staggerChildren: 0.2
+    }
+  }
+}
 
 export default function TypeArenaLanding() {
   return (
-    <div className="min-h-screen w-full flex flex-col bg-white dark:bg-background  relative overflow-hidden">
+    <motion.div 
+      initial="initial"
+      animate="animate"
+      className="min-h-screen w-full flex flex-col bg-white dark:bg-background relative overflow-hidden"
+    >
       
-      {/* Dotted background */}
+      {/* Background elements */}
       <div className="absolute dark:hidden inset-0 z-0">
         <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
           <defs>
@@ -20,7 +41,6 @@ export default function TypeArenaLanding() {
         </svg>
       </div>
 
-      {/* Grid lines */}
       <div className="absolute dark:hidden inset-0 z-0">
         <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
           <defs>
@@ -32,7 +52,6 @@ export default function TypeArenaLanding() {
         </svg>
       </div>
 
-      {/* Curved lines */}
       <div className="absolute dark:hidden inset-x-0 top-0 h-32 z-0">
         <svg className="w-full h-full" viewBox="0 0 1440 320" xmlns="http://www.w3.org/2000/svg">
           <path fill="none" stroke="#e5e7eb" strokeWidth="1" d="M0,160 C320,300,520,0,1440,160 L1440,0 L0,0 Z"></path>
@@ -43,131 +62,189 @@ export default function TypeArenaLanding() {
           <path fill="none" stroke="#e5e7eb" strokeWidth="1" d="M0,160 C320,20,520,320,1440,160 L1440,320 L0,320 Z"></path>
         </svg>
       </div>
-     
 
       {/* Main content */}
-      <main className="flex-grow dark:text-white flex flex-col items-center justify-center relative z-10 px-6 py-16">
-        <div className="text-center max-w-3xl mx-auto mb-16">
-        <p className="mx-auto w-[200px] rounded-md mb-2 bg-gray-100 text-md text-gray-900">
-            🎉 Introducing TypeArena
-          </p>
-          <h1 className="text-5xl w-full text-black dark:text-white font-bold mb-4 leading-tight">
-           Maximize Your Typing Speed <br /> with <span className='text-yellow-500'>TypeArena</span>
-          </h1>
-          <p className="mx-auto mt-2 text-lg mb-10 text-gray-800 dark:text-gray-300">
-          Compete in real-time with friends and players worldwide. <br /> Track your progress and master every keystroke.
-          </p>
-          <Link
-            href="/playground"
-            className="bg-yellow-500 text-white px-8 py-3 rounded-full hover:bg-yellow-600 transition-colors inline-flex items-center text-lg font-medium"
+      <motion.main 
+        variants={stagger}
+        className="flex-grow dark:text-white flex flex-col items-center justify-center relative z-10 px-6 py-16"
+      >
+        <motion.div 
+          variants={fadeInUp}
+          className="text-center max-w-3xl mx-auto mb-16"
+        >
+          <motion.p 
+            variants={fadeInUp}
+            transition={{ delay: 0.2, duration: 0.8 }}
+            className="mx-auto w-[200px] rounded-md mb-2 bg-gray-100 text-md text-gray-900"
           >
-            Start Typing Now
-            <ArrowRight className="ml-2 h-5 w-5" />
-          </Link>
-        </div>
+            🎉 Introducing TypeArena
+          </motion.p>
+          <motion.h1 
+            variants={fadeInUp}
+            transition={{ delay: 0.4, duration: 0.8 }}
+            className="text-5xl w-full text-black dark:text-white font-bold mb-4 leading-tight"
+          >
+            Maximize Your Typing Speed <br /> with <span className='text-yellow-500'>TypeArena</span>
+          </motion.h1>
+          <motion.p 
+            variants={fadeInUp}
+            transition={{ delay: 0.6, duration: 0.8 }}
+            className="mx-auto mt-2 text-lg mb-10 text-gray-800 dark:text-gray-300"
+          >
+            Compete in real-time with friends and players worldwide. <br /> Track your progress and master every keystroke.
+          </motion.p>
+          <motion.div 
+            variants={fadeInUp}
+            transition={{ delay: 0.8, duration: 0.8 }}
+          >
+            <Link
+              href="/playground"
+              className="bg-yellow-500 text-white px-8 py-3 rounded-full hover:bg-yellow-600 transition-colors inline-flex items-center text-lg font-medium"
+            >
+              Start Typing Now
+              <ArrowRight className="ml-2 h-5 w-5" />
+            </Link>
+          </motion.div>
+        </motion.div>
 
-        
-        {/* Call to Action */}
+        <motion.section 
+          variants={fadeInUp}
+          transition={{ delay: 1, duration: 0.8 }}
+          className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16 md:max-w-6xl"
+        >
+          {[
+            { icon: Timer, title: "Time Challenges", content: "Test your speed and accuracy against the clock in various timed modes." },
+            { icon: Trophy, title: "Leaderboards", content: "Climb the ranks and showcase your typing prowess on global leaderboards." },
+            { icon: Users, title: "Multiplayer Rooms", content: "Create or join typing rooms to compete directly with friends and rivals." }
+          ].map((item, index) => (
+            <motion.div
+              key={index}
+              variants={{
+                initial: { opacity: 0, scale: 0.9 },
+                animate: { opacity: 1, scale: 1, transition: { duration: 0.8, delay: 1.2 + index * 0.2 } }
+              }}
+            >
+              <Card>
+                <CardHeader>
+                  <item.icon className="w-8 h-8 text-gray-600 mb-2" />
+                  <CardTitle>{item.title}</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-gray-600 dark:text-gray-300">{item.content}</p>
+                </CardContent>
+              </Card>
+            </motion.div>
+          ))}
+        </motion.section>
 
-        <section className="grid text-black dark:text-white grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
-          <Card>
-            <CardHeader>
-              <Keyboard className="w-8 h-8 text-gray-600 mb-2" />
-              <CardTitle>Real-Time Typing</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-gray-600 dark:text-gray-300">Experience the thrill of live typing competitions with players worldwide.</p>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardHeader>
-              <Timer className="w-8 h-8 text-gray-600 mb-2" />
-              <CardTitle>Time Challenges</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-gray-600 dark:text-gray-300">Test your speed and accuracy against the clock in various timed modes.</p>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardHeader>
-              <Trophy className="w-8 h-8 text-gray-600 mb-2" />
-              <CardTitle>Leaderboards</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-gray-600 dark:text-gray-300">Climb the ranks and showcase your typing prowess on global leaderboards.</p>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardHeader>
-              <Users className="w-8 h-8 text-gray-600 mb-2" />
-              <CardTitle>Multiplayer Rooms</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-gray-600 dark:text-gray-300">Create or join typing rooms to compete directly with friends and rivals.</p>
-            </CardContent>
-          </Card>
-        </section>
+        <motion.section 
+          variants={fadeInUp}
+          transition={{ delay: 1.8, duration: 0.8 }}
+          className="rounded-lg p-8 mb-16"
+        >
+          <motion.h3 
+            variants={fadeInUp}
+            transition={{ delay: 2, duration: 0.8 }}
+            className="text-3xl font-bold text-gray-900 dark:text-white mb-6"
+          >
+            Why Choose TypeArena?
+          </motion.h3>
+          <motion.div 
+            variants={stagger}
+            className="grid dark:text-gray-300 grid-cols-1 md:grid-cols-2 gap-8"
+          >
+            {[
+              { icon: BarChart, title: "Detailed Analytics", content: "Track your progress with in-depth statistics and performance graphs." },
+              { icon: Target, title: "Personalized Goals", content: "Set and achieve custom typing goals tailored to your skill level." },
+              { icon: Zap, title: "Daily Challenges", content: "Take on new typing challenges every day to keep your skills sharp." },
+              { icon: Coffee, title: "Typing Breaks", content: "Learn proper typing posture and take regular breaks to prevent fatigue." }
+            ].map((item, index) => (
+              <motion.div 
+                key={index}
+                variants={fadeInUp}
+                transition={{ delay: 2.2 + index * 0.2, duration: 0.8 }}
+                className="flex items-start"
+              >
+                <item.icon className="w-6 h-6 text-gray-600 mr-4 flex-shrink-0" />
+                <div>
+                  <h4 className="text-xl font-semibold mb-2">{item.title}</h4>
+                  <p className="text-gray-600 dark:text-gray-300">{item.content}</p>
+                </div>
+              </motion.div>
+            ))}
+          </motion.div>
+        </motion.section>
 
-        <section className=" rounded-lg p-8 mb-16">
-          <h3 className="text-3xl font-bold text-gray-900 dark:text-white mb-6">Why Choose TypeArena?</h3>
-          <div className="grid dark:text-gray-300 grid-cols-1 md:grid-cols-2 gap-8">
-            <div className="flex items-start">
-              <BarChart className="w-6 h-6 text-gray-600 mr-4 flex-shrink-0" />
-              <div>
-                <h4 className="text-xl font-semibold mb-2">Detailed Analytics</h4>
-                <p className="text-gray-600 dark:text-gray-300">Track your progress with in-depth statistics and performance graphs.</p>
-              </div>
-            </div>
-            <div className="flex items-start">
-              <Target className="w-6 h-6 text-gray-600 mr-4 flex-shrink-0" />
-              <div>
-                <h4 className="text-xl font-semibold mb-2">Personalized Goals</h4>
-                <p className="text-gray-600 dark:text-gray-300">Set and achieve custom typing goals tailored to your skill level.</p>
-              </div>
-            </div>
-            <div className="flex items-start">
-              <Zap className="w-6 h-6 text-gray-600 mr-4 flex-shrink-0" />
-              <div>
-                <h4 className="text-xl font-semibold mb-2">Daily Challenges</h4>
-                <p className="text-gray-600 dark:text-gray-300">Take on new typing challenges every day to keep your skills sharp.</p>
-              </div>
-            </div>
-            <div className="flex items-start">
-              <Coffee className="w-6 h-6 text-gray-600 mr-4 flex-shrink-0" />
-              <div>
-                <h4 className="text-xl font-semibold mb-2">Typing Breaks</h4>
-                <p className="text-gray-600  dark:text-gray-300">Learn proper typing posture and take regular breaks to prevent fatigue.</p>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section className="text-center mb-16">
-          <h3 className="text-3xl font-bold text-gray-900 dark:text-white mb-6">Join Thousands of Happy Typists</h3>
-          <div className="flex flex-wrap justify-center gap-4 ">
-           <AnimatedTooltipPreview />
-          </div>
-          <p className="text-gray-600 dark:text-gray-300 text-xl mb-8">
+        <motion.section 
+          variants={fadeInUp}
+          transition={{ delay: 3, duration: 0.8 }}
+          className="text-center mb-16"
+        >
+          <motion.h3 
+            variants={fadeInUp}
+            transition={{ delay: 3.2, duration: 0.8 }}
+            className="text-3xl font-bold text-gray-900 dark:text-white mb-6"
+          >
+            Join Thousands of Happy Typists
+          </motion.h3>
+          <motion.div 
+            variants={fadeInUp}
+            transition={{ delay: 3.4, duration: 0.8 }}
+            className="flex flex-wrap justify-center gap-4"
+          >
+            <AnimatedTooltipPreview />
+          </motion.div>
+          <motion.p 
+            variants={fadeInUp}
+            transition={{ delay: 3.6, duration: 0.8 }}
+            className="text-gray-600 dark:text-gray-300 text-xl mb-8"
+          >
             &quot;TypeArena has transformed my typing speed and accuracy. I&apos;ve never had so much fun improving my skills!&quot;
-          </p>
-          <Button variant="outline" size="lg" className="border-gray-300 text-gray-600 dark:text-white hover:bg-gray-50 dark:hover:bg-gray-800">
-            Read Success Stories
-          </Button>
-        </section>
+          </motion.p>
+          <motion.div 
+            variants={fadeInUp}
+            transition={{ delay: 3.8, duration: 0.8 }}
+          >
+            <Button variant="outline" size="lg" className="border-gray-300 text-gray-600 dark:text-white hover:bg-gray-50 dark:hover:bg-gray-800">
+              Read Success Stories
+            </Button>
+          </motion.div>
+        </motion.section>
 
-        <section className=" rounded-lg p-8 text-center">
-          <h3 className="text-3xl font-bold text-gray-900 dark:text-gray-300 mb-6">Ready to Become a Typing Master?</h3>
-          <p className="text-xl text-gray-600 dark:text-gray-300 mb-8">Join our community of fast and accurate typists today. It&apos;s free to start!</p>
-          <div className="flex justify-center gap-4">
+        <motion.section 
+          variants={fadeInUp}
+          transition={{ delay: 4, duration: 0.8 }}
+          className="rounded-lg p-8 text-center"
+        >
+          <motion.h3 
+            variants={fadeInUp}
+            transition={{ delay: 4.2, duration: 0.8 }}
+            className="text-3xl font-bold text-gray-900 dark:text-gray-300 mb-6"
+          >
+            Ready to Become a Typing Master?
+          </motion.h3>
+          <motion.p 
+            variants={fadeInUp}
+            transition={{ delay: 4.4, duration: 0.8 }}
+            className="text-xl text-gray-600 dark:text-gray-300 mb-8"
+          >
+            Join our community of fast and accurate typists today. It&apos;s free to start!
+          </motion.p>
+          <motion.div 
+            variants={fadeInUp}
+            transition={{ delay: 4.6, duration: 0.8 }}
+            className="flex justify-center gap-4"
+          >
             <Button size="lg" className="bg-gray-900 text-white hover:bg-gray-800">
               <Link href='/signup'>Sign Up Now</Link>
             </Button>
             <Button size="lg" variant="outline" className="border-gray-300 text-gray-600 dark:text-white hover:bg-gray-50 dark:hover:bg-gray-800">
               <Link href='/about'>Learn More</Link>
             </Button>
-          </div>
-        </section>
-      </main>
-    </div>
+          </motion.div>
+        </motion.section>
+      </motion.main>
+    </motion.div>
   )
 }
+
