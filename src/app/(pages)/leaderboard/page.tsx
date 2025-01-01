@@ -96,8 +96,8 @@ export default function LeaderboardPage() {
                       {index > 2 && index + 1}
                     </TableCell>
                     <TableCell>
-                      <Link href={`/${user.username}`} className="underline hover:underline">
-                        {user.username}
+                      <Link href={`/${user.username}`} className=" text-md hover:underline">
+                        {user.fullname.toLowerCase()} 
                       </Link>
                     </TableCell>
                     <TableCell>{user.testAttempted}</TableCell>

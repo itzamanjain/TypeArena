@@ -57,7 +57,7 @@ export default function TypeArenaLanding() {
           <path fill="none" stroke="#e5e7eb" strokeWidth="1" d="M0,160 C320,300,520,0,1440,160 L1440,0 L0,0 Z"></path>
         </svg>
       </div>
-      <div className="absolute inset-x-0 bottom-0 h-32 z-0">
+      <div className="absolute dark:hidden inset-x-0 bottom-0 h-32 z-0">
         <svg className="w-full h-full" viewBox="0 0 1440 320" xmlns="http://www.w3.org/2000/svg">
           <path fill="none" stroke="#e5e7eb" strokeWidth="1" d="M0,160 C320,20,520,320,1440,160 L1440,320 L0,320 Z"></path>
         </svg>
