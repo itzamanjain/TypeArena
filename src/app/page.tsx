@@ -3,9 +3,8 @@ import { ThemeProvider } from '@/components/theme-providers'
 
 export default function Home() {
   return (
-    <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+    <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
       <main className=" ">
-        
         <Hero />    
       </main>
     </ThemeProvider>

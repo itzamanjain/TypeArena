@@ -6,6 +6,7 @@ import { Button } from '../ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { AnimatedTooltipPreview } from './AnimatedTooltip'
 import { motion } from 'framer-motion'
+import { Spotlight } from '../ui/Spotlight'
 
 const fadeInUp = {
   initial: { opacity: 0, y: 50 },
@@ -28,7 +29,11 @@ export default function TypeArenaLanding() {
       animate="animate"
       className="min-h-screen w-full flex flex-col bg-white dark:bg-background relative overflow-hidden"
     >
-      
+      {/* <SpotlightPreview /> */}
+      <Spotlight
+        className="-top-40 left-0 md:left-60 md:-top-20"
+        fill="gray"
+      />
       {/* Background elements */}
       <div className="absolute dark:hidden inset-0 z-0">
         <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
