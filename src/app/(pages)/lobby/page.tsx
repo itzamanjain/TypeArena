@@ -161,7 +161,7 @@ export default function TypingTest() {
       <h1 className="text-3xl font-bold mb-6 text-center">Typing Test Room</h1>
       <div className="flex flex-col gap-10">
         <div className='flex flex-col md:flex-row justify-between gap-2'>
-          <Card className='w-full md:w-1/2'>
+          {!isTestRunning && <Card className='w-full md:w-1/2'>
             <CardHeader>
               <CardTitle>Room Controls</CardTitle>
             </CardHeader>
@@ -184,35 +184,35 @@ export default function TypingTest() {
                 </div>
               </div>
             </CardContent>
-          </Card>
+          </Card>}
           {/* ------------------------------------ */}
-          <Card className="w-full md:w-1/2">
-            <CardHeader>
-              <CardTitle className="flex items-center space-x-2">
-                <Users className="w-5 h-5" />
-                <span>Leaderboard</span>
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="flex flex-col gap-2   overflow-y-auto max-h-[200px]">
-                {Object.keys(players).length > 0 && (
-                  <div className='flex justify-between text-sm  font-semibold mb-2'>
-                    <span className='ml-3'>Player ID</span>
-                    <span className='mr-4'>Speed (WPM)</span>
-                  </div>
-                )}
-                {Object.entries(players).map(([playerId, player]) => (
-                  <div key={playerId} className="flex justify-between items-center p-3 bg-gray-50 dark:bg-black rounded-lg">
-                    <span className="font-medium text-sm">{playerId.slice(0, 6).toLowerCase()}</span>
-                    <span className="text-sm">{player.wpm}</span>
-                  </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
+        {!isTestRunning && <Card className="w-full md:w-1/2">
+          <CardHeader>
+            <CardTitle className="flex items-center space-x-2">
+              <Users className="w-5 h-5" />
+              <span>Leaderboard</span>
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="flex flex-col gap-2   overflow-y-auto max-h-[200px]">
+              {Object.keys(players).length > 0 && (
+                <div className='flex justify-between text-sm  font-semibold mb-2'>
+                  <span className='ml-3'>Player ID</span>
+                  <span className='mr-4'>Speed (WPM)</span>
+                </div>
+              )}
+              {Object.entries(players).map(([playerId, player]) => (
+                <div key={playerId} className="flex justify-between items-center p-3 bg-gray-50 dark:bg-black rounded-lg">
+                  <span className="font-medium text-sm">{playerId.slice(0, 6).toLowerCase()}</span>
+                  <span className="text-sm">{player.wpm}</span>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>}
         </div>
 
-        <Card>
+        <Card className='border-none'>
           <CardHeader>
             <CardTitle className="text-2xl font-bold">Typing Test</CardTitle>
           </CardHeader>
@@ -243,7 +243,7 @@ export default function TypingTest() {
                   value={(typedText.length / text.length) * 100}
                   className="w-full h-4 rounded-full"
                 />
-                <div className="relative min-h-[200px] w-full rounded-lg border bg-background p-4 font-mono text-2xl">
+                <div className="relative min-h-[500px] w-full rounded-lg  bg-background p-4 font-mono text-xl md:text-3xl">
                   {/* Background sample text with red highlight for incorrect input */}
                   <div
                     className="absolute  inset-0 p-4 pointer-events-none whitespace-pre-wrap break-words leading-relaxed tracking-wide"
@@ -270,7 +270,7 @@ export default function TypingTest() {
                   <textarea
                     value={typedText}
                     onChange={handleTyping}
-                    className="relative min-h-[200px] h-full w-full text-transparent caret-black dark:caret-white  resize-none bg-transparent p-0 font-inherit leading-relaxed tracking-wide focus:outline-none focus:ring-0"
+                    className="relative min-h-[500px] h-full w-full text-transparent caret-black dark:caret-white  resize-none bg-transparent p-0 font-inherit leading-relaxed tracking-wide focus:outline-none focus:ring-0"
                     style={{ wordSpacing: '0.25em' }}
                     placeholder=""
                     disabled={!isTestRunning}

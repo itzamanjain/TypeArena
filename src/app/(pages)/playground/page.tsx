@@ -144,25 +144,8 @@ export default function TypingTest() {
                   <Clock className="w-8 h-8" />
                   <span className="text-3xl">{timeLeft}s</span>
                 </div>
-                <div className="flex items-center space-x-3">
-                  {/* <AlertCircle className="w-6 h-6" /> */}
-                  {/* Your Accuracy: <span className="font-bold">{accuracy.toFixed(2)}%</span> */}
-                </div>
-                <div className="flex items-center space-x-3">
-                  {/* <Trophy className="w-6 h-6" /> */}
-                  {/* <span>{wpm} WPM</span> */}
-                </div>
               </div>
-              {/* <Progress
-                value={(typedText.length / text.length) * 100}
-                className="w-full  h-4 rounded-full"
-              /> */}
-              {/* <Button
-                className="text-xl bg-gray-800 text-white hover:bg-gray-900 font-medium rounded-md p-4 animate-bounce-short"
-              >
-                Click Below to Start Typing
-              </Button> */}
-
+             
               <div className="relative  min-h-[500px] w-full rounded-lg  bg-background p-4 font-mono text-xl md:text-3xl ">
                 <div
                   className="absolute inset-0 p-4  pointer-events-none whitespace-pre-wrap break-words leading-relaxed tracking-wide"
