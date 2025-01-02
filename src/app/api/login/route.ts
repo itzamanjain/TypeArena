@@ -44,9 +44,15 @@ export async function POST(request: NextRequest) {
         });
 
         
+        const user = {
+            id: existingUser?._id,
+            name: existingUser?.fullname,
+            email: existingUser?.email,
+            token,
+        };
 
         const response = NextResponse.json(
-            { message: "Login successful", success: true, token },
+            { message: "Login successful", success: true,user, token },
             { status: 200 }
         );
 
