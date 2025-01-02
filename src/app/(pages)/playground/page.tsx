@@ -103,11 +103,9 @@ export default function TypingTest() {
   }
 
   return (
-    <div className="container min-h-screen mx-auto px-6 py-8">
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-3xl font-bold">Typing Test</CardTitle>
-        </CardHeader>
+    <div className="container min-h-screen items-center justify-center mx-auto px-6 py-8">
+      <Card className="border-none items-center justify-center">
+        
         <CardContent>
           {showCountdown && (
             <div className="text-center">
@@ -119,29 +117,29 @@ export default function TypingTest() {
             <div className="space-y-6">
               <div className="flex items-center justify-between text-lg font-medium">
                 <div className="flex items-center space-x-3">
-                  <Clock className="w-6 h-6" />
-                  <span>{timeLeft}s</span>
+                  <Clock className="w-8 h-8" />
+                  <span className="text-3xl">{timeLeft}s</span>
                 </div>
                 <div className="flex items-center space-x-3">
-                  <AlertCircle className="w-6 h-6" />
-                  Your Accuracy: <span className="font-bold">{accuracy.toFixed(2)}%</span>
+                  {/* <AlertCircle className="w-6 h-6" /> */}
+                  {/* Your Accuracy: <span className="font-bold">{accuracy.toFixed(2)}%</span> */}
                 </div>
                 <div className="flex items-center space-x-3">
-                  <Trophy className="w-6 h-6" />
-                  <span>{wpm} WPM</span>
+                  {/* <Trophy className="w-6 h-6" /> */}
+                  {/* <span>{wpm} WPM</span> */}
                 </div>
               </div>
               {/* <Progress
                 value={(typedText.length / text.length) * 100}
                 className="w-full  h-4 rounded-full"
               /> */}
-              <Button
+              {/* <Button
                 className="text-xl bg-gray-800 text-white hover:bg-gray-900 font-medium rounded-md p-4 animate-bounce-short"
               >
-                Click below  to start typing 👇
-              </Button>
+                Click Below to Start Typing
+              </Button> */}
 
-              <div className="relative  min-h-[200px] w-full rounded-lg border bg-background p-4 font-mono text-2xl">
+              <div className="relative  min-h-[500px] w-full rounded-lg  bg-background p-4 font-mono text-xl md:text-3xl ">
                 <div
                   className="absolute inset-0 p-4  pointer-events-none whitespace-pre-wrap break-words leading-relaxed tracking-wide"
                   style={{ wordSpacing: "0.25em" }}
@@ -166,7 +164,7 @@ export default function TypingTest() {
                 <textarea
                   value={typedText}
                   onChange={handleTyping}
-                  className="relative min-h-[200px]  h-full w-full text-transparent caret-black dark:caret-white  resize-none bg-transparent p-0 font-inherit leading-relaxed tracking-wide focus:outline-none focus:ring-0"
+                  className="relative  min-h-[700px] md:min-h-[500px] w-full text-transparent caret-black dark:caret-white  resize-none bg-transparent p-0 font-inherit leading-relaxed tracking-wide focus:outline-none focus:ring-0"
                   style={{ wordSpacing: "0.25em" }}
                   placeholder=""
                   disabled={!isTestRunning}
@@ -203,7 +201,7 @@ export default function TypingTest() {
           )}
         </CardContent>
       </Card>
-      <LeaderboardPage />
+      {!isTestRunning ?  <LeaderboardPage /> : null}
       <Toaster
         position="bottom-right"
         reverseOrder={false}
