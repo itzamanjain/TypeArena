@@ -3,14 +3,14 @@
 import React, { useState, useEffect, useRef } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Progress } from "@/components/ui/progress"
 import { AlertCircle, Clock, Trophy, Users } from 'lucide-react';
 import sampleParagraphs from '@/data/sampleParagraphs'
 import axios from "axios"
 import toast, { Toaster } from "react-hot-toast"
 import LeaderboardPage from "../leaderboard/page"
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog"
 
-const WORD_LIMIT = 100
+
 const TIME_LIMIT = 60
 
 export default function TypingTest() {
@@ -23,6 +23,8 @@ export default function TypingTest() {
   const [resultsDisplayed, setResultsDisplayed] = useState<boolean>(false)
   const [countdown, setCountdown] = useState<number>(3)
   const [showCountdown, setShowCountdown] = useState<boolean>(false)
+  const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false)
+  const textAreaRef = useRef<HTMLTextAreaElement>(null)
 
   const selectRandomSampleText = (): string => {
     const randomIndex = Math.floor(Math.random() * sampleParagraphs.paragraphs.length)
@@ -43,6 +45,9 @@ export default function TypingTest() {
         if (prev === 1) {
           clearInterval(countdownInterval)
           setShowCountdown(false)
+          if (textAreaRef.current) {
+            textAreaRef.current.focus();
+          }
           setIsTestRunning(true)
           setTimeLeft(TIME_LIMIT)
           return prev
@@ -53,12 +58,26 @@ export default function TypingTest() {
   }
 
   useEffect(() => {
+    if (showCountdown && countdown > 0) {
+      const timer = setTimeout(() => setCountdown(countdown - 1), 1000);
+      return () => clearTimeout(timer);
+    } else if (showCountdown && countdown === 0) {
+      setShowCountdown(false);
+      setIsTestRunning(true);
+      setTimeLeft(TIME_LIMIT);
+      if (textAreaRef.current) {
+        textAreaRef.current.focus();
+      }
+    }
+  }, [showCountdown, countdown]);
+
+  useEffect(() => {
     if (isTestRunning && timeLeft > 0) {
       const timer = setTimeout(() => setTimeLeft(timeLeft - 1), 1000)
       return () => clearTimeout(timer)
     } else if (timeLeft === 0 && isTestRunning) {
       setIsTestRunning(false)
-      setResultsDisplayed(true)
+      setIsDialogOpen(true)
     }
   }, [isTestRunning, timeLeft])
 
@@ -102,9 +121,14 @@ export default function TypingTest() {
     setWpm(Math.round(wpmValue))
   }
 
+  const handlePlayAgain = () => {
+    setIsDialogOpen(false)
+    startTest()
+  }
+
   return (
-    <div className="container min-h-screen items-center justify-center mx-auto px-6 py-8">
-      <Card className="border-none items-center justify-center">
+    <div className="container min-h-screen  mx-auto px-6 py-8">
+      <Card className="border-none ">
         
         <CardContent>
           {showCountdown && (
@@ -151,7 +175,7 @@ export default function TypingTest() {
                       className={
                         index < typedText.length
                           ? typedText[index] === char
-                            ? "text-green-500"
+                            ? "text-green-500 dark:text-gray-200"
                             : "text-red-500"
                           : "text-gray-500"
                       }
@@ -160,8 +184,8 @@ export default function TypingTest() {
                     </span>
                   ))}
                 </div>
-
                 <textarea
+                  ref={textAreaRef}
                   value={typedText}
                   onChange={handleTyping}
                   className="relative  min-h-[700px] md:min-h-[500px] w-full text-transparent caret-black dark:caret-white  resize-none bg-transparent p-0 font-inherit leading-relaxed tracking-wide focus:outline-none focus:ring-0"
@@ -174,23 +198,27 @@ export default function TypingTest() {
               </div>
             </div>
           )}
-          {resultsDisplayed && (
-            <div className="space-y-4 mt-6">
-              <h2 className="text-3xl font-bold">Final Results</h2>
-              <p className="text-xl">
-                Your WPM: <span className="font-bold">{wpm}</span>
-              </p>
-              <p className="text-xl">
-                Your Accuracy: <span className="font-bold">{accuracy.toFixed(2)}%</span>
-              </p>
-              <Button
-                onClick={startTest}
-                className="text-white text-lg py-3 bg-gray-500 hover:bg-gray-600"
-              >
-                Try Again
-              </Button>
-            </div>
-          )}
+          <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Typing Test Results</DialogTitle>
+                <DialogDescription>Here's how you performed:</DialogDescription>
+              </DialogHeader>
+              <div className="py-4">
+                <p className="text-xl mb-2">
+                  Your WPM: <span className="font-bold">{wpm}</span>
+                </p>
+                <p className="text-xl">
+                  Your Accuracy: <span className="font-bold">{accuracy.toFixed(2)}%</span>
+                </p>
+              </div>
+              <DialogFooter>
+                <Button onClick={handlePlayAgain} className="bg-gray-700 hover:bg-gray-900 text-white">
+                  Play Again
+                </Button>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
           {!isTestRunning && !showCountdown && !resultsDisplayed && (
             <Button
               onClick={startTest}
@@ -201,7 +229,7 @@ export default function TypingTest() {
           )}
         </CardContent>
       </Card>
-      {!isTestRunning ?  <LeaderboardPage /> : null}
+      {!isTestRunning && !resultsDisplayed && <LeaderboardPage />}
       <Toaster
         position="bottom-right"
         reverseOrder={false}
@@ -209,3 +237,4 @@ export default function TypingTest() {
     </div>
   )
 }
+
