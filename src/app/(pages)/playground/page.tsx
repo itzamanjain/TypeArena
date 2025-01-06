@@ -2,75 +2,40 @@
 
 import React, { useState, useEffect, useRef } from "react"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { AlertCircle, Clock, Trophy, Users } from 'lucide-react';
+import { Card, CardContent } from "@/components/ui/card"
+import { Clock } from 'lucide-react'
 import sampleParagraphs from '@/data/sampleParagraphs'
 import axios from "axios"
 import toast, { Toaster } from "react-hot-toast"
-import LeaderboardPage from "../leaderboard/page"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog"
-
 
 const TIME_LIMIT = 60
 
 export default function TypingTest() {
   const [timeLeft, setTimeLeft] = useState<number>(TIME_LIMIT)
-  const [isTestRunning, setIsTestRunning] = useState<boolean>(false)
+  const [isTestRunning, setIsTestRunning] = useState<boolean>(false) // Changed to false initially
+  const [hasStarted, setHasStarted] = useState<boolean>(false) // New state to track if test has started
   const [typedText, setTypedText] = useState<string>("")
   const [text, setText] = useState<string>("")
   const [accuracy, setAccuracy] = useState<number>(100)
   const [wpm, setWpm] = useState<number>(0)
-  const [resultsDisplayed, setResultsDisplayed] = useState<boolean>(false)
-  const [countdown, setCountdown] = useState<number>(3)
-  const [showCountdown, setShowCountdown] = useState<boolean>(false)
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false)
   const textAreaRef = useRef<HTMLTextAreaElement>(null)
 
-  const selectRandomSampleText = (): string => {
-    const randomIndex = Math.floor(Math.random() * sampleParagraphs.paragraphs.length)
-    return sampleParagraphs.paragraphs[randomIndex].text
-  }
-
-  const startTest = (): void => {
-    setShowCountdown(true)
-    setCountdown(3)
-    setText(selectRandomSampleText())
-    setTypedText("")
-    setResultsDisplayed(false)
-    setAccuracy(100)
-    setWpm(0)
-
-    const countdownInterval = setInterval(() => {
-      setCountdown((prev) => {
-        if (prev === 1) {
-          clearInterval(countdownInterval)
-          setShowCountdown(false)
-          if (textAreaRef.current) {
-            textAreaRef.current.focus();
-          }
-          setIsTestRunning(true)
-          setTimeLeft(TIME_LIMIT)
-          return prev
-        }
-        return prev - 1
-      })
-    }, 1000)
-  }
-
+  // Select random sample text on component mount
   useEffect(() => {
-    if (showCountdown && countdown > 0) {
-      const timer = setTimeout(() => setCountdown(countdown - 1), 1000);
-      return () => clearTimeout(timer);
-    } else if (showCountdown && countdown === 0) {
-      setShowCountdown(false);
-      setIsTestRunning(true);
-      setTimeLeft(TIME_LIMIT);
-      if (textAreaRef.current) {
-        textAreaRef.current.focus();
-      }
+    const selectRandomSampleText = (): string => {
+      const randomIndex = Math.floor(Math.random() * sampleParagraphs.paragraphs.length)
+      return sampleParagraphs.paragraphs[randomIndex].text
     }
-  }, [showCountdown, countdown]);
+    setText(selectRandomSampleText())
 
+    if (textAreaRef.current) {
+      textAreaRef.current.focus()
+    }
+  }, [])
+
+  // Timer logic
   useEffect(() => {
     if (isTestRunning && timeLeft > 0) {
       const timer = setTimeout(() => setTimeLeft(timeLeft - 1), 1000)
@@ -81,26 +46,17 @@ export default function TypingTest() {
     }
   }, [isTestRunning, timeLeft])
 
-  useEffect(() => {
-    // make a api call to store the result to db 
-    if (resultsDisplayed) {
-      const storeresult = async () => {
-        try {
-          const response = await axios.put('/api/store-result', { speed: wpm, accuracy: accuracy });
-          console.log('Result stored:', response.data);
-          toast.success("Result stored successfully")
-        } catch (error) {
-          toast.error("Failed to store result")
-          console.log('error while storing the result')
-        }
-      }
-      storeresult();
-    }
-
-  }, [resultsDisplayed])
-
+  // Typing handler
   const handleTyping = (e: React.ChangeEvent<HTMLTextAreaElement>): void => {
     const typed = e.target.value
+    if (typed.length > text.length) return // Prevent typing beyond the text length
+
+    // Start the test on first keystroke
+    if (!hasStarted && typed.length > 0) {
+      setHasStarted(true)
+      setIsTestRunning(true)
+    }
+
     setTypedText(typed)
 
     const charactersTyped = typed.length
@@ -119,36 +75,54 @@ export default function TypingTest() {
     const words = typed.trim().split(/\s+/).filter((word) => word.length > 0)
     const wpmValue = timeLeft < TIME_LIMIT ? (words.length / ((TIME_LIMIT - timeLeft) / 60)) : 0
     setWpm(Math.round(wpmValue))
+
+    if (typed === text) {
+      // Stop the test if text is completed
+      setIsTestRunning(false)
+      setIsDialogOpen(true)
+    }
   }
 
-  const handlePlayAgain = () => {
-    setIsDialogOpen(false)
-    startTest()
+  // Store results when dialog is displayed
+  useEffect(() => {
+    if (!isTestRunning && hasStarted && typedText.length > 0) {
+      const storeResult = async () => {
+        try {
+          const response = await axios.put('/api/store-result', { speed: wpm, accuracy });
+          console.log('Result stored:', response.data);
+          toast.success("Result stored successfully")
+        } catch (error) {
+          toast.error("Failed to store result")
+          console.log('Error while storing the result')
+        }
+      }
+      storeResult();
+    }
+  }, [isTestRunning, hasStarted])
+
+  // Reset function
+  const handleReset = () => {
+    window.location.reload()
   }
 
   return (
-    <div className="container min-h-screen  mx-auto px-6 py-8">
-      <Card className="border-none ">
-        
+    <div className="container min-h-screen mx-auto px-6 py-8">
+      <Card className="border-none">
         <CardContent>
-          {showCountdown && (
-            <div className="text-center">
-              <h2 className="text-7xl font-extrabold mb-4">{countdown}</h2>
-              <p className="text-lg text-muted-foreground">Get ready...</p>
-            </div>
-          )}
-          {(isTestRunning || resultsDisplayed) && (
+          {(!isDialogOpen) && (
             <div className="space-y-6">
               <div className="flex items-center justify-between text-lg font-medium">
                 <div className="flex items-center space-x-3">
                   <Clock className="w-8 h-8" />
-                  <span className="text-3xl">{timeLeft}s</span>
+                  <span className="text-3xl">
+                    {hasStarted ? `${timeLeft}s` : 'Start typing to begin'}
+                  </span>
                 </div>
               </div>
-             
-              <div className="relative  min-h-[500px] w-full rounded-lg  bg-background p-4 font-mono text-xl md:text-3xl ">
+
+              <div className="relative min-h-[500px] w-full rounded-lg bg-background p-4 font-mono text-xl md:text-3xl">
                 <div
-                  className="absolute inset-0 p-4  pointer-events-none whitespace-pre-wrap break-words leading-relaxed tracking-wide"
+                  className="absolute inset-0 p-4 pointer-events-none whitespace-pre-wrap break-words leading-relaxed tracking-wide"
                   style={{ wordSpacing: "0.25em" }}
                   aria-hidden="true"
                 >
@@ -171,16 +145,17 @@ export default function TypingTest() {
                   ref={textAreaRef}
                   value={typedText}
                   onChange={handleTyping}
-                  className="relative  min-h-[700px] md:min-h-[500px] w-full text-transparent caret-black dark:caret-white  resize-none bg-transparent p-0 font-inherit leading-relaxed tracking-wide focus:outline-none focus:ring-0"
+                  className="relative min-h-[700px] md:min-h-[500px] w-full text-transparent caret-black dark:caret-white resize-none bg-transparent p-0 font-inherit leading-relaxed tracking-wide focus:outline-none focus:ring-0"
                   style={{ wordSpacing: "0.25em" }}
                   placeholder=""
-                  disabled={!isTestRunning}
+                  disabled={!isTestRunning && hasStarted}
                   onPaste={(e) => e.preventDefault()}
                   onContextMenu={(e) => e.preventDefault()}
                 />
               </div>
             </div>
           )}
+
           <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
             <DialogContent>
               <DialogHeader>
@@ -196,27 +171,15 @@ export default function TypingTest() {
                 </p>
               </div>
               <DialogFooter>
-                <Button onClick={handlePlayAgain} className="bg-gray-700 hover:bg-gray-900 text-white">
-                  Play Again
+                <Button onClick={handleReset} className="bg-gray-700 hover:bg-gray-900 text-white">
+                  Try Again
                 </Button>
               </DialogFooter>
             </DialogContent>
           </Dialog>
-          {!isTestRunning && !showCountdown && !resultsDisplayed && (
-            <Button
-              onClick={startTest}
-              className=" text-white text-lg py-3 bg-gray-700 hover:bg-gray-900"
-            >
-              Start Test
-            </Button>
-          )}
         </CardContent>
       </Card>
-      {!isTestRunning && !resultsDisplayed && <LeaderboardPage />}
-      <Toaster
-        position="bottom-right"
-        reverseOrder={false}
-      />
+      <Toaster position="bottom-right" reverseOrder={false} />
     </div>
   )
 }
