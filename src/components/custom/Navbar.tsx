@@ -18,8 +18,8 @@ const NavItems = () => (
     <Link href="/lobby" className="text-gray-600 dark:text-gray-200 hover:text-gray-900 transition-colors">
       Play with friends
     </Link>
-    <Link href='/profile' className="text-gray-600 dark:text-gray-200 hover:text-gray-900 transition-colors">
-      Profile
+    <Link href='/subscription' className="text-gray-600 dark:text-gray-200 hover:text-gray-900 transition-colors">
+      Pricing
     </Link>
     <Link href='/leaderboard' className="text-gray-600 dark:text-gray-200 hover:text-gray-900 transition-colors">
       leaderboard
