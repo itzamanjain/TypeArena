@@ -5,6 +5,7 @@ import "./globals.css";
 import { Navbar } from "@/components/custom/Navbar";
 import { Footer } from "@/components/custom/Footer";
 import { ThemeProvider } from '@/components/theme-providers';
+import Script from 'next/script';
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -32,6 +33,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       > 
+      <Script src='https://checkout.razorpay.com/v1/checkout.js' strategy='lazyOnload' />
       <ThemeProvider
             attribute="class"
             defaultTheme="system"
@@ -39,6 +41,7 @@ export default function RootLayout({
             disableTransitionOnChange
           >
         <Navbar />
+        
         {children}
         <Footer />
         <Analytics />
