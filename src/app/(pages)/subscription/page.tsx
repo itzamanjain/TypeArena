@@ -5,10 +5,10 @@ import { useState } from "react"
 import axios from "axios"
 import useAuthStore from "@/store/useStore"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
-import { AlertCircle } from "lucide-react"
+import { AlertCircle , Loader2} from "lucide-react"
 
-//TODO:  check for login before payment
-// add spinner while creating order in the background so it doesnt call multiple times
+//TODO:  check for login before payment ✅
+// add spinner while creating order in the background so it doesnt call multiple times ✅
 // add subscription model and u are subsriped also update the profile to PRO
 // 
 
@@ -18,13 +18,16 @@ export default function SubscriptionPage() {
     const [varient,setVarient ] = useState("lifetime")
     const {isAuthenticated} = useAuthStore()
     const [isHovered, setIsHovered] = useState(false)
+    const [isLoading, setIsLoading] = useState(false)
 
     
     const handleCheckOut = async () => {
+        setIsLoading(true)
         const res = await axios.post("/api/orders",{
             productId,
             varient
         })
+        setIsLoading(false)
 
         const { razorpayOrder, order } = res.data;
 
@@ -117,7 +120,7 @@ export default function SubscriptionPage() {
           onClick={handleCheckOut}
           className="w-full rounded-lg bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 transition duration-300"
         >
-          Get Lifetime Access
+          {isLoading ? <Loader2 className="animate-spin" /> : 'Get Lifetime Access'}
         </Button>
       ) : (
         <TooltipProvider>
