@@ -3,14 +3,23 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter }
 import { Button } from "@/components/ui/button"
 import { useState } from "react"
 import axios from "axios"
-// Remove the incorrect import
+import useAuthStore from "@/store/useStore"
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
+import { AlertCircle } from "lucide-react"
+
+//TODO:  check for login before payment
+// add spinner while creating order in the background so it doesnt call multiple times
+// add subscription model and u are subsriped also update the profile to PRO
+// 
 
 
 export default function SubscriptionPage() {
     const [productId,setProductId ] = useState("subscription")
     const [varient,setVarient ] = useState("lifetime")
-    // give checkout with razor pay call 
+    const {isAuthenticated} = useAuthStore()
+    const [isHovered, setIsHovered] = useState(false)
 
+    
     const handleCheckOut = async () => {
         const res = await axios.post("/api/orders",{
             productId,
@@ -21,12 +30,12 @@ export default function SubscriptionPage() {
 
       // Step 2: Razorpay payment options
       const options = {
-        key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID || "", // Replace with your Razorpay key ID
-        amount: razorpayOrder.amount, // Amount in paisa (50000 = ₹500)
+        key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID || "", 
+        amount: razorpayOrder.amount, 
         currency: razorpayOrder.currency,
         name: "TypeArena",
         description: "Lifetime Subscription",
-        order_id: razorpayOrder.id, // Razorpay Order ID
+        order_id: razorpayOrder.id, 
         handler: async (response: any) => {
             try {
                 const verificationRes = await axios.post("/api/verify-payment", {
@@ -103,10 +112,36 @@ export default function SubscriptionPage() {
             </ul>
           </CardContent>
           <CardFooter>
-            <Button onClick={handleCheckOut} className="w-full rounded-lg bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4  transition duration-300">
-              Get Lifetime Access
-            </Button>
-          </CardFooter>
+      {isAuthenticated ? (
+        <Button
+          onClick={handleCheckOut}
+          className="w-full rounded-lg bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 transition duration-300"
+        >
+          Get Lifetime Access
+        </Button>
+      ) : (
+        <TooltipProvider>
+          <Tooltip open={isHovered}>
+            <TooltipTrigger asChild>
+              <div className="w-full" onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)}>
+                <Button
+                  disabled
+                  className="w-full rounded-lg bg-yellow-500 text-white font-bold py-2 px-4 cursor-not-allowed"
+                >
+                  Get Lifetime Access
+                </Button>
+              </div>
+            </TooltipTrigger>
+            <TooltipContent side="top">
+              <div className="flex items-center">
+                <AlertCircle className="mr-2 h-4 w-4 text-yellow-500" />
+                <span>Please log in first to proceed</span>
+              </div>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+      )}
+    </CardFooter>
         </Card>
       </div>
     </div>
