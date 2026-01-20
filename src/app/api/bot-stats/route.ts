@@ -39,17 +39,31 @@ export async function GET(request: NextRequest) {
     }
 
     const stats = getAttackStats();
-    const recentBlocked = getFilteredLogs({
-      reason: ['gptbot-blocked', 'claudebot-blocked', 'suspicious-user-agent', 'rate-limit-exceeded']
-    }).slice(-20); // Last 20 blocked requests
 
-    const gptBotRequests = getFilteredLogs({ reason: 'gptbot-blocked' }).length;
-    const ipRangeBlocks = getFilteredLogs({ reason: 'blocked-ip-range' }).length;
-    const totalBlocked = recentBlocked.length;
+    // Get recent blocked requests from all blocked categories
+    const gptBotLogs = getFilteredLogs({ reason: 'gptbot-blocked' });
+    const claudeBotLogs = getFilteredLogs({ reason: 'claudebot-blocked' });
+    const suspiciousUALogs = getFilteredLogs({ reason: 'suspicious-user-agent' });
+    const rateLimitLogs = getFilteredLogs({ reason: 'rate-limit-exceeded' });
+    const ipRangeLogs = getFilteredLogs({ reason: 'blocked-ip-range' });
+
+    // Combine and sort by timestamp, take last 20
+    const allBlockedLogs = [
+      ...gptBotLogs,
+      ...claudeBotLogs,
+      ...suspiciousUALogs,
+      ...rateLimitLogs,
+      ...ipRangeLogs
+    ].sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime())
+     .slice(0, 20);
+
+    const gptBotRequests = gptBotLogs.length;
+    const ipRangeBlocks = ipRangeLogs.length;
+    const totalBlocked = gptBotLogs.length + claudeBotLogs.length + suspiciousUALogs.length + rateLimitLogs.length + ipRangeLogs.length;
 
     return NextResponse.json({
       stats,
-      recentBlocked,
+      recentBlocked: allBlockedLogs,
       blockedIPRanges: BLOCKED_IP_RANGES,
       botBreakdown: {
         gptBot: gptBotRequests,

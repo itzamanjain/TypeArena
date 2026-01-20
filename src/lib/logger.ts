@@ -144,3 +144,4 @@ export function exportLogs(): LogEntry[] {
 export function clearLogs(): void {
   logs.length = 0;
 }
+
