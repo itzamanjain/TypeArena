@@ -2,6 +2,7 @@ import { connectDb } from "@/dbconfig/dbconfig";
 import { getDataFromToken } from "@/lib/getDataFromToken";
 import User from "@/models/user.model";
 import { NextRequest, NextResponse } from "next/server";
+import { rateLimit } from "@/lib/ratelimit";
 
 connectDb();
 // send the user data except password
@@ -9,6 +10,13 @@ connectDb();
 // url : /api/player-profile?username=itzaman
 
 export async function GET(request:NextRequest){
+    // Apply rate limiting
+    if (!rateLimit(request)) {
+        return NextResponse.json(
+            { message: "Too many requests. Please try again later." },
+            { status: 429 }
+        );
+    }
     try {
         const { searchParams } = new URL(request.url);
         const username = searchParams.get("username");

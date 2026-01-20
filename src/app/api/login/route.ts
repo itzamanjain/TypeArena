@@ -3,10 +3,18 @@ import User from "@/models/user.model";
 import { NextRequest, NextResponse } from "next/server";
 import bcryptjs from "bcryptjs";
 import jwt from "jsonwebtoken";
+import { rateLimit } from "@/lib/ratelimit";
 
 connectDb();
 
 export async function POST(request: NextRequest) {
+    // Apply rate limiting
+    if (!rateLimit(request)) {
+        return NextResponse.json(
+            { message: "Too many requests. Please try again later." },
+            { status: 429 }
+        );
+    }
     try {
         const reqBody = await request.json();
         const { email, password } = reqBody;

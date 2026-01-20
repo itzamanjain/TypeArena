@@ -1,7 +1,14 @@
 import { NextRequest,NextResponse } from "next/server";
-
+import { rateLimit } from "@/lib/ratelimit";
 
 export async  function GET(request:NextRequest,response:NextResponse){
+    // Apply rate limiting
+    if (!rateLimit(request)) {
+        return NextResponse.json(
+            { message: "Too many requests. Please try again later." },
+            { status: 429 }
+        );
+    }
 
     try {
       const response =  NextResponse.json({message:'Logout successful',success:true}) 

@@ -12,13 +12,13 @@ export async function POST(request:NextRequest){
         console.log("connection making-----------------------");
         
         await connectDb();
-        // 5 signup requests per day 
-        // if(!rateLimit(request)){
-        //     return NextResponse.json(
-        //         { message: "Rate limit exceeded" },
-        //         { status: 429 }
-        //     );
-        // }
+        // Apply rate limiting for signup
+        if(!rateLimit(request)){
+            return NextResponse.json(
+                { message: "Too many signup attempts. Please try again later." },
+                { status: 429 }
+            );
+        }
 
         const reqBody = await request.json();
         console.log("requsest received",reqBody);

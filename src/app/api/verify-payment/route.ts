@@ -2,8 +2,16 @@ import { NextRequest, NextResponse } from "next/server";
 import crypto from "crypto";
 import { connectDb } from "@/dbconfig/dbconfig";
 import Order from "@/models/order.model";
+import { rateLimit } from "@/lib/ratelimit";
 
 export async function POST(request:NextRequest) {
+    // Apply rate limiting
+    if (!rateLimit(request)) {
+        return NextResponse.json(
+            { success: false, message: "Too many requests. Please try again later." },
+            { status: 429 }
+        );
+    }
   try {
     const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = await request.json();
 

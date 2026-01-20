@@ -12,20 +12,20 @@ import { ModeToggle } from './ModeToggle'
 
 const NavItems = () => (
   <>
-    <Link href="/playground" className="text-gray-600 dark:text-gray-200 hover:text-gray-900 transition-colors">
+    <Link href="/playground" prefetch={false} className="text-gray-600 dark:text-gray-200 hover:text-gray-900 transition-colors">
       Play Now
     </Link>
-    <Link href="/lobby" className="text-gray-600 dark:text-gray-200 hover:text-gray-900 transition-colors">
+    <Link href="/lobby" prefetch={false} className="text-gray-600 dark:text-gray-200 hover:text-gray-900 transition-colors">
       Play with friends
     </Link>
-    <Link href='/subscription' className="text-gray-600 dark:text-gray-200 hover:text-gray-900 transition-colors">
+    <Link href='/subscription' prefetch={false} className="text-gray-600 dark:text-gray-200 hover:text-gray-900 transition-colors">
       Pricing
     </Link>
-    <Link href='/leaderboard' className="text-gray-600 dark:text-gray-200 hover:text-gray-900 transition-colors">
+    <Link href='/leaderboard' prefetch={false} className="text-gray-600 dark:text-gray-200 hover:text-gray-900 transition-colors">
       leaderboard
     </Link>
     <ModeToggle />
-    
+
   </>
 )
 
@@ -48,7 +48,7 @@ export function Navbar() {
     <header className="mx-auto dark:bg-background p-6 border-b  w-full ">
       <nav className="flex justify-between items-center">
         <h1 className="text-2xl dark:text-black font-bold text-gray-900">
-        <Link href="/" className="text-2xl font-semibold text-yellow-500">
+        <Link href="/" prefetch={false} className="text-2xl font-semibold text-yellow-500">
             TypeArena
           </Link>
         </h1>
@@ -60,6 +60,7 @@ export function Navbar() {
           ) : (
             <Link
             href="/signup"
+            prefetch={false}
             className="text-sm bg-yellow-500 text-white px-4 py-2 rounded-full hover:bg-yellow-600 transition-colors flex items-center"
           >
             Join Now
@@ -80,7 +81,7 @@ export function Navbar() {
               {user?.token ? (
                 <Button className='bg-yellow-500 text-white' onClick={handleLogout}>Logout</Button>
               ) : (
-                <Link href="/signup">Join Now</Link>
+                <Link href="/signup" prefetch={false}>Join Now</Link>
               )}
             </nav>
           </SheetContent>

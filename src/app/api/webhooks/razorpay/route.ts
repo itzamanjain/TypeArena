@@ -2,8 +2,16 @@ import { NextRequest, NextResponse } from "next/server";
 import crypto from "crypto";
 import { connectDb } from "@/dbconfig/dbconfig";
 import Order from "@/models/order.model";
+import { rateLimit } from "@/lib/ratelimit";
 
 export async function POST(request:NextRequest){
+    // Apply rate limiting (webhooks have high limits)
+    if (!rateLimit(request)) {
+        return NextResponse.json(
+            { message: "Too many requests" },
+            { status: 429 }
+        );
+    }
     try {
         const body = await request.text();
         const signature = request.headers.get("x-razorpay-signature");

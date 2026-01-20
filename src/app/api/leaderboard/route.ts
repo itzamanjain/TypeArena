@@ -2,12 +2,20 @@ import { connectDb } from "@/dbconfig/dbconfig";
 import { getDataFromToken } from "@/lib/getDataFromToken";
 import User from "@/models/user.model";
 import { NextRequest, NextResponse } from "next/server";
+import { rateLimit } from "@/lib/ratelimit";
 
 connectDb();
 
-//leaderboard api send the top 10 users with thier username , topSpeed and avgSpeed and testAttempted 
+//leaderboard api send the top 10 users with thier username , topSpeed and avgSpeed and testAttempted
 
 export async function GET(request:NextRequest){
+    // Apply rate limiting
+    if (!rateLimit(request)) {
+        return NextResponse.json(
+            { message: "Too many requests. Please try again later." },
+            { status: 429 }
+        );
+    }
     try{
         const users = await User.find().sort({topSpeed:-1}).limit(50).select("fullname username topSpeed  testAttempted");
         return NextResponse.json({message:"leaderboard found",users},{status:200})

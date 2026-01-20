@@ -104,6 +104,7 @@ export default function TypeArenaLanding() {
           >
             <Link
               href="/playground"
+              prefetch={false}
               className="bg-yellow-500 text-white px-8 py-3 rounded-full hover:bg-yellow-600 transition-colors inline-flex items-center text-lg font-medium"
             >
               Start Typing Now

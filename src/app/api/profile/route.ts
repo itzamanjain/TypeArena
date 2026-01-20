@@ -2,12 +2,20 @@ import { connectDb } from "@/dbconfig/dbconfig";
 import { getDataFromToken } from "@/lib/getDataFromToken";
 import User from "@/models/user.model";
 import { NextRequest, NextResponse } from "next/server";
+import { rateLimit } from "@/lib/ratelimit";
 
 connectDb();
 // send the user data except password
 
 
 export async function GET(request:NextRequest){
+    // Apply rate limiting
+    if (!rateLimit(request)) {
+        return NextResponse.json(
+            { message: "Too many requests. Please try again later." },
+            { status: 429 }
+        );
+    }
     try {
         const reqUserId = getDataFromToken(request);
         if (!reqUserId) {

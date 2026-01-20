@@ -3,6 +3,7 @@ import { getDataFromToken } from '@/lib/getDataFromToken';
 import Order from '@/models/order.model';
 import { NextRequest, NextResponse } from 'next/server'
 import Razorpay from 'razorpay'
+import { rateLimit } from '@/lib/ratelimit';
 
 const razorpay = new Razorpay({
     key_id: process.env.RAZORPAY_KEY_ID!,
@@ -10,6 +11,13 @@ const razorpay = new Razorpay({
 })
 
 export async function POST(request:NextRequest,response:NextResponse ){
+    // Apply rate limiting
+    if (!rateLimit(request)) {
+        return NextResponse.json(
+            { message: "Too many requests. Please try again later." },
+            { status: 429 }
+        );
+    }
     try {
         const reqUserId = getDataFromToken(request);
         if (!reqUserId) {
